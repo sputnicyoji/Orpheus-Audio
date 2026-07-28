@@ -1,0 +1,13 @@
+{
+  "name": "Orpheus.Audio.ContractConsumer.Runtime",
+  "rootNamespace": "Orpheus.Audio.ContractConsumer",
+  "references": [
+    "Orpheus.Audio",
+    "Orpheus.Audio.Core"
+  ],
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "autoReferenced": false,
+  "noEngineReferences": false
+}

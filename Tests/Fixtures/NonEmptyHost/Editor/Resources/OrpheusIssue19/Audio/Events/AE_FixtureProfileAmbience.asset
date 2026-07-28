@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f8b490214d5ca24697a78bee2899e5e, type: 3}
+  m_Name: AE_FixtureProfileAmbience
+  m_EditorClassIdentifier:
+  _schemaVersion: 1
+  _key: 106
+  _playbackKind: 5
+  _category: 5
+  _loadPolicy: 3
+  _clips:
+  - {fileID: 8300000, guid: c08cdffb09cf7b346b34fd848f249ed8, type: 3}
+  _volumeMin: 1
+  _volumeMax: 1
+  _pitchMin: 1
+  _pitchMax: 1
+  _priority: 128
+  _polyphonyCap: 1
+  _cooldownSeconds: 0
+  _minimumDistance: 1
+  _maximumDistance: 500
+  _rolloffMode: 1

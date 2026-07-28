@@ -1,0 +1,27 @@
+name: Feature request
+description: Propose a concrete consumer capability
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: consumer-problem
+    attributes:
+      label: Consumer problem
+      description: Describe the game-facing or Host-integration problem.
+    validations:
+      required: true
+  - type: textarea
+    id: current-limit
+    attributes:
+      label: Current limitation
+      description: Explain why the existing public contract cannot solve it.
+    validations:
+      required: true
+  - type: textarea
+    id: contract-impact
+    attributes:
+      label: Contract and runtime impact
+      description: Note API, serialized ABI, allocation, ownership, and platform effects.
+    validations:
+      required: true

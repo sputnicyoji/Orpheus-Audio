@@ -1,0 +1,10 @@
+{
+  "name": "Orpheus.Audio.Samples.PlayableOneShot",
+  "rootNamespace": "Orpheus.Audio.Samples.PlayableOneShot",
+  "references": [
+    "GUID:0432bcfb49015c44895ee1f8c066fc76",
+    "GUID:4e3791568dfeb5d42bd2351c7bd978ce"
+  ],
+  "autoReferenced": true,
+  "noEngineReferences": false
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Orpheus.Audio.TestFixtures",
+  "rootNamespace": "Orpheus.Audio.Tests.Fixtures",
+  "references": [
+    "Orpheus.Audio",
+    "Orpheus.Audio.Core"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "autoReferenced": false
+}

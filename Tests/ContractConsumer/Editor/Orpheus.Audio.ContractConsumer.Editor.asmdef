@@ -1,0 +1,17 @@
+{
+  "name": "Orpheus.Audio.ContractConsumer.Editor",
+  "rootNamespace": "Orpheus.Audio.ContractConsumer.Editor",
+  "references": [
+    "Orpheus.Audio.Editor",
+    "Orpheus.Audio",
+    "Orpheus.Audio.Core"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "autoReferenced": false,
+  "noEngineReferences": false
+}

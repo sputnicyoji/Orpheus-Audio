@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e314449859546c94481ff37bf605150b, type: 3}
+  m_Name: FixtureCatalog
+  m_EditorClassIdentifier:
+  _schemaVersion: 1
+  _events:
+  - {fileID: 11400000, guid: 3af3261e7daf11841afd51b6cddf6133, type: 2}
+  - {fileID: 11400000, guid: 09e1cd790d9ec474cb01530097ba55ff, type: 2}
+  - {fileID: 11400000, guid: e1913721542d0034297ac57001623bac, type: 2}
+  - {fileID: 11400000, guid: 78838a0f84649a441b34abeb069fcb2a, type: 2}
+  - {fileID: 11400000, guid: a653206f755f23d46a484f9ab2833f68, type: 2}
+  - {fileID: 11400000, guid: e350c1e9b4d484c4bb499e0c952b318d, type: 2}
+  - {fileID: 11400000, guid: 7177a4513c7eaef4aa2a87fe148187f3, type: 2}

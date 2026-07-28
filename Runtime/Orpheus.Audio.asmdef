@@ -1,0 +1,9 @@
+{
+  "name": "Orpheus.Audio",
+  "rootNamespace": "Orpheus.Audio",
+  "references": [
+    "Orpheus.Audio.Core"
+  ],
+  "autoReferenced": true,
+  "noEngineReferences": false
+}

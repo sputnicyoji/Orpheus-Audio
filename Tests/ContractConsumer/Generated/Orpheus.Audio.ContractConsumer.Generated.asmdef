@@ -1,0 +1,13 @@
+{
+  "name": "Orpheus.Audio.ContractConsumer.Generated",
+  "rootNamespace": "Orpheus.Audio.ContractConsumer.Generated",
+  "references": [
+    "Orpheus.Audio.ContractConsumer.GeneratedProjection",
+    "Orpheus.Audio.Core"
+  ],
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "autoReferenced": false,
+  "noEngineReferences": true
+}

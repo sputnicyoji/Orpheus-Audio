@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d253fcd6d84444c8d5db351aa5402c, type: 3}
+  m_Name: OrpheusAudioSettings
+  m_EditorClassIdentifier:
+  _schemaVersion: 1
+  _mixer: {fileID: 24100000, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _master: {fileID: 24300002, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _musicUser: {fileID: 9207881045707997349, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _musicState: {fileID: 5220059248243529391, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _sfxCombatUser: {fileID: 650464713177899864, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _sfxCombatState: {fileID: -2311729731184364492, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _sfxWorldUser: {fileID: 8662946530387182128, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _sfxWorldState: {fileID: 2207863779299561915, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _sfxUiUser: {fileID: -2204290440023133301, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _sfxUiState: {fileID: 7046544677178485859, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _ambienceUser: {fileID: -6686119258094708440, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _ambienceState: {fileID: -6436926312557563825, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _peace: {fileID: 24500006, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _combat: {fileID: 24500007, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _menu: {fileID: 24500008, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _pause: {fileID: 24500009, guid: 11ac330373d1965419147ec5723110e8, type: 2}
+  _bgmCrossfadeSeconds: 0.4
+  _profileAmbienceCrossfadeSeconds: 0.4
+  _snapshotTransitionSeconds: 0.6
+  _androidManualResetEnabled: 0

@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a reproducible Orpheus Audio defect
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not report vulnerabilities or include credentials, signing material,
+        local paths, or device identifiers. Follow SECURITY.md instead.
+  - type: input
+    id: package-version
+    attributes:
+      label: Package version
+      placeholder: 0.2.1
+    validations:
+      required: true
+  - type: input
+    id: unity-version
+    attributes:
+      label: Unity version
+      placeholder: 2022.3.62f2c1
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      placeholder: Windows Editor, Windows Standalone, or Android
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: List deterministic steps and the smallest relevant Host setup.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include sanitized Diagnostics when available.
+    validations:
+      required: true

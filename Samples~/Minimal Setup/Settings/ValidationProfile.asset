@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65222b2bccf84bcdb3e93bd8fff50f93, type: 3}
+  m_Name: ValidationProfile
+  m_EditorClassIdentifier:
+  _schemaVersion: 1
+  _enabled: 1
+  _settings: {fileID: 11400000, guid: 31ad799344f179b40a880a22209a2b79, type: 2}
+  _catalog: {fileID: 11400000, guid: 2e8f76f8212ed7040956bb08bc18df0b, type: 2}
+  _keyManifest: {fileID: 11400000, guid: a7a9d3a63875c1d458c5b68213d7daa8, type: 2}
+  _runtimeHostPrefab: {fileID: 5195179447579448235, guid: dc099d9b1dfd58a45b84d2df8e5fdd6a, type: 3}
+  _listenerScenes:
+  - {fileID: 102900000, guid: 77fcf7d75de457f469c0ecbf50af64d5, type: 3}

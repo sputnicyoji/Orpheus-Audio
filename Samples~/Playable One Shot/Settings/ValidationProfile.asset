@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65222b2bccf84bcdb3e93bd8fff50f93, type: 3}
+  m_Name: PlayableOneShotValidationProfile
+  m_EditorClassIdentifier:
+  _schemaVersion: 1
+  _enabled: 1
+  _settings: {fileID: 11400000, guid: ca4afc2b7d744abe84ccb9033ed7f43d, type: 2}
+  _catalog: {fileID: 11400000, guid: c3a95a29e52a4b4d853b78520846e959, type: 2}
+  _keyManifest: {fileID: 11400000, guid: 7a75685cd7854b97b152293fb46baa5d, type: 2}
+  _runtimeHostPrefab: {fileID: 5195179447579448235, guid: 7b2d412dc6e14b4094fb77632d3aeb7d, type: 3}
+  _listenerScenes:
+  - {fileID: 102900000, guid: 9d19c3d69dfa402cb7e62ed8b0bfaeaa, type: 3}
