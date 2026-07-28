@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-07-28
+
+- Corrected Settings duration documentation to the enforced `0.015s..5s`
+  range.
+- Clarified that Playback Ready does not include per-Clip load state.
+- Corrected runtime error ownership for Mixer and Clip validation failures.
+- Replaced an invalid generated-key declaration example and documented public
+  enum sentinels.
+- Added the Unity Git dependency prerequisite.
+
 ## [0.2.1] - 2026-07-28
 
 - Added copy-ready Git installation, public API, diagnostics, troubleshooting,

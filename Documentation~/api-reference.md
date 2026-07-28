@@ -1,7 +1,7 @@
 # API Reference
 
 This task-oriented reference covers the supported consumer owners in package
-`0.2.1`. The checked-in API baseline is the exhaustive signature contract.
+`0.2.2`. The checked-in API baseline is the exhaustive signature contract.
 All runtime calls are main-thread-only unless stated otherwise. Invalid calls
 reject deterministically and degrade to silence.
 
@@ -222,7 +222,8 @@ public OrpheusAudioProfileIntent(
     OrpheusAudioKey profileAmbienceKey);
 ```
 
-Public Base States are `Peace` and `Combat`.
+`OrpheusBaseState.Invalid` is the default sentinel. Valid public Base State
+inputs are `Peace` and `Combat`.
 
 ## User gain
 
@@ -233,9 +234,10 @@ public bool TryGetUserGain(OrpheusBus bus, out float linearGain);
 
 Valid gains are finite linear values in `[0,1]`.
 
-`OrpheusBus` values:
+`OrpheusBus` members:
 
 ```text
+Invalid
 Master
 Music
 SfxCombat
@@ -243,6 +245,8 @@ SfxWorld
 SfxUi
 Ambience
 ```
+
+`Invalid` is the default sentinel and is rejected as an operation target.
 
 The Host owns persistence. Load gains before Factory creation and save them
 before teardown.
@@ -311,11 +315,13 @@ OrpheusAudioKeys.PlayableOneShot
 
 Do not derive category from the numeric value. Retired IDs are never reused.
 
-Generated output also exposes:
+Representative generated output also exposes:
 
 ```csharp
-public const int ManifestSchemaVersion;
-public const string ManifestContentHash;
+public const int ManifestSchemaVersion = 1;
+public const string ManifestContentHash = "<generated SHA-256 hex>";
+public static readonly OrpheusAudioKey PlayableOneShot =
+    new OrpheusAudioKey(100);
 ```
 
 The schema version guards generator compatibility. The content hash identifies

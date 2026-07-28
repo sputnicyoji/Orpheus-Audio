@@ -34,13 +34,13 @@ if (!result.Success)
 | --- | --- |
 | `InvalidArguments` | Main thread, non-null Runtime Host, and one Manager per Host |
 | `InvalidInitialGain` | Six finite linear values in `[0,1]` |
-| `InvalidSettings` | Current Settings schema and finite non-negative durations |
-| `InvalidMixerContract` | One Mixer identity, all groups, snapshots, and exposed parameters |
+| `InvalidSettings` | Current Settings schema and finite durations in `0.015s..5s` |
+| `InvalidMixerContract` | Non-null Mixer reference, stable Mixer identity, and no Mixer lease conflict |
 | `InvalidSourceBank` | Exact fixed roles and one clean `AudioSource` per leaf |
 | `InvalidCatalog` | Non-null, sorted Catalog with valid Events |
 | `DuplicateKey` | One Event per active key |
-| `InvalidEvent` | Playback, category, loading, distance, and variation policy |
-| `InvalidClipReference` | Required unique, non-null Clips |
+| `InvalidEvent` | Playback, category, loading, distance, variation policy, and duplicate Clip references |
+| `InvalidClipReference` | Non-null, readable Clip references |
 | `InvalidAudioConfiguration` | Valid DSP buffer, sample rate, and voice limits |
 
 Failure returns a null Manager.
@@ -127,6 +127,14 @@ Restore the missing Host condition instead of manually restarting sources.
 
 Disabled is terminal. Save external state if available, dispose, unbind, and
 create a new Audio Session after repairing the Host.
+
+Common Mixer-related disable reasons:
+
+| Disable reason | Check |
+| --- | --- |
+| `MixerGroupReferenceInvalid` | All eleven groups belong to the configured Mixer |
+| `SnapshotReferenceInvalid` | Peace, Combat, Menu, and Pause belong to the configured Mixer |
+| `MixerSetFloatFailed` | All six documented exposed parameters exist and accept writes |
 
 ## No audible output
 

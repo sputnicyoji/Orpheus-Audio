@@ -34,6 +34,12 @@ Tests/Baselines/GeneratedKeys.v1.golden.cs.txt
 
 Do not rewrite package-owned serialized fields through reflection.
 
+## `0.2.1` to `0.2.2`
+
+`0.2.2` corrects consumer documentation and immutable documentation links. It
+does not change Public Contract v1, serialized asset ABI, generated-key shape,
+or runtime behavior.
+
 ## `0.2.0` to `0.2.1`
 
 `0.2.1` adds the MIT license, immutable public documentation links, and

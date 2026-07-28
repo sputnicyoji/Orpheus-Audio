@@ -26,7 +26,7 @@ Generate typed keys before adding that final reference to a new Host.
 
 ## Public Contract v1
 
-Package `0.2.1` freezes the supported owners listed below, their method
+Package `0.2.2` freezes the supported owners listed below, their method
 signatures, serialized Host asset fields, and the deterministic generated
 `OrpheusAudioKeys` shape. Types not exposed by those owners are implementation
 details. Do not construct Catalog entries, authoring policy values, clip
@@ -97,9 +97,10 @@ private IEnumerator Start()
 }
 ```
 
-`HostReady` and `BootstrapHydrated` are independent barriers. Playback begins
-only after both barriers, a Listener, active transport, and loaded content
-produce Playback Ready.
+`HostReady` and `BootstrapHydrated` are independent barriers. Playback Ready
+requires both barriers and active transport. A bound, enabled Listener keeps
+transport active. Clip load state is separate; each playback request still
+requires Loaded content.
 
 Check `OrpheusAudioInitResult.ErrorCode`, `RelatedKey`, and `RelatedIndex` on a
 failed create. Failure always returns a null Manager.

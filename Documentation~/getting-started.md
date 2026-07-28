@@ -3,6 +3,9 @@
 This path installs Orpheus, imports a valid Host, and plays one audible cue.
 It targets Unity `2022.3.62f2c1`.
 
+Git installation requires Git `2.14.0` or newer and the Git executable on the
+system `PATH`. Local `file:` installation does not use Git.
+
 ## 1. Install
 
 Choose one source.
@@ -27,7 +30,7 @@ Pinned Git revision:
 ```json
 {
   "dependencies": {
-    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.2.1"
+    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.2.2"
   }
 }
 ```
@@ -42,7 +45,7 @@ Manager resolution and script compilation finish.
 3. Open `Samples`.
 4. Import `Playable One Shot`.
 5. Open the imported
-   `Assets/Samples/Orpheus Audio/0.2.1/Playable One Shot` directory.
+   `Assets/Samples/Orpheus Audio/0.2.2/Playable One Shot` directory.
 
 Unity owns the imported copy. Package updates do not overwrite it.
 

@@ -4,7 +4,7 @@ The Host Manifest, Audio Events, Catalog, Settings, Runtime Host prefab, and
 Listener Scenes form one validated authoring set. Runtime never scans the
 project to discover content.
 
-Public Contract v1 in package `0.2.1` freezes the serialized field identities
+Public Contract v1 in package `0.2.2` freezes the serialized field identities
 for these Host assets. Upgrade through the package changelog and migration
 guide. Do not rename fields or rewrite package assets through reflection.
 
@@ -206,7 +206,7 @@ Code | ProfilePath | AssetPath | event=<index> | related=<index> | detail=<value
 | `InvalidEventPolicy`, `EventKeyNotActive`, `MissingActiveEvent`, `InvalidEventAssetName` | Apply the playback matrix, activate the Manifest entry, add exactly one Event, and use `AE_<Symbol>.asset` |
 | `MissingClipReference`, `DuplicateClipReference` | Assign `1..8` distinct non-null Clips |
 | `MissingAudioImporter`, `InvalidAudioImporterPolicy` | Reimport the Clip and apply the importer matrix |
-| `InvalidBgmCrossfadeDuration`, `InvalidProfileAmbienceCrossfadeDuration`, `InvalidSnapshotTransitionDuration` | Use finite non-negative Settings durations |
+| `InvalidBgmCrossfadeDuration`, `InvalidProfileAmbienceCrossfadeDuration`, `InvalidSnapshotTransitionDuration` | Use finite Settings durations in `0.015s..5s` |
 | `MissingMixer`, `MissingMixerGroup`, `MissingMixerSnapshot`, `MismatchedMixerReference` | Assign one Mixer identity and every required group/snapshot from it |
 | `InvalidMixerUpdateMode`, `InvalidMixerGroupContract`, `InvalidMixerExposedParameterContract` | Use `UnscaledTime` and the exact hierarchy/parameter names above |
 | `InvalidMixerSnapshotContract`, `InvalidMixerSnapshotOverride`, `InvalidMixerAttenuation`, `InaudibleStateUi`, `UnsupportedMixerSerialization` | Restore the sample Mixer topology, finite `[-80,0] dB` overrides, and audible UI state |

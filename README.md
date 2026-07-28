@@ -13,17 +13,20 @@ policy core.
 | Android | Experimental |
 | iOS, macOS, WebGL, other platforms | Unsupported until verified |
 
-Package `0.2.1` declares Public Contract v1. It remains pre-`1.0`.
+Package `0.2.2` declares Public Contract v1. It remains pre-`1.0`.
 
 ## Install
 
 Add the pinned Git dependency to the consuming project's
 `Packages/manifest.json`:
 
+Git installation requires Git `2.14.0` or newer and the Git executable on the
+system `PATH`.
+
 ```json
 {
   "dependencies": {
-    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.2.1"
+    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.2.2"
   }
 }
 ```
