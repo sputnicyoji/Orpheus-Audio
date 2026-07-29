@@ -1298,7 +1298,7 @@ function Assert-OrpheusVerifyWorkflow {
     Assert-OrpheusExactYamlKeys -Mapping $checkout.with -Expected @("persist-credentials") -Label "verify checkout inputs"
     Assert-OrpheusExactYamlKeys -Mapping $validation -Expected @("name", "shell", "run") -Label "verify validation step"
     if (
-        -not [string]::Equals([string] $checkout.uses, "actions/checkout@11d5960a326750d5838078e36cf38b85af677262", [System.StringComparison]::Ordinal) -or
+        -not [string]::Equals([string] $checkout.uses, "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1", [System.StringComparison]::Ordinal) -or
         -not [string]::Equals([string] $checkout.with["persist-credentials"], "false", [System.StringComparison]::OrdinalIgnoreCase)
     ) {
         throw "Workflow policy verify checkout must disable persisted credentials."
@@ -1393,7 +1393,7 @@ function Assert-OrpheusUnityWorkflow {
     Assert-OrpheusExactYamlKeys -Mapping $runner -Expected @("name", "uses", "env", "with") -Label "Unity runner step"
     Assert-OrpheusExactYamlKeys -Mapping $upload -Expected @("name", "if", "uses", "with") -Label "Unity upload step"
     if (
-        -not [string]::Equals([string] $checkout.uses, "actions/checkout@11d5960a326750d5838078e36cf38b85af677262", [System.StringComparison]::Ordinal) -or
+        -not [string]::Equals([string] $checkout.uses, "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1", [System.StringComparison]::Ordinal) -or
         -not [string]::Equals([string] $checkout.with["persist-credentials"], "false", [System.StringComparison]::OrdinalIgnoreCase)
     ) {
         throw "Workflow policy Unity checkout must disable persisted credentials."
@@ -1465,7 +1465,7 @@ function Assert-OrpheusUnityWorkflow {
     if (
         -not [string]::Equals([string] $upload.name, "Upload results", [System.StringComparison]::Ordinal) -or
         -not [string]::Equals([string] $upload.if, "always()", [System.StringComparison]::Ordinal) -or
-        -not [string]::Equals([string] $upload.uses, "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02", [System.StringComparison]::Ordinal) -or
+        -not [string]::Equals([string] $upload.uses, "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a", [System.StringComparison]::Ordinal) -or
         -not [string]::Equals([string] $upload.with.name, 'unity-${{ matrix.testMode }}', [System.StringComparison]::Ordinal) -or
         -not [string]::Equals([string] $upload.with.path, "artifacts", [System.StringComparison]::Ordinal) -or
         -not [string]::Equals([string] $upload.with["retention-days"], "7", [System.StringComparison]::Ordinal) -or
