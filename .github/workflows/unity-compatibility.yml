@@ -1,0 +1,49 @@
+name: Unity Compatibility
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: unity-compatibility-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  compatibility:
+    if: github.ref == 'refs/heads/main' && vars.ORPHEUS_UNITY_CI_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        testMode:
+          - editmode
+          - playmode
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Stage package
+        shell: bash
+        run: mkdir -p .ci/package && rsync -a --delete --exclude='/.ci/' --exclude='/.git/' --exclude='/.github/' --exclude='/.orpheus-export.json' --exclude='/.gitattributes' --exclude='/.gitignore' ./ .ci/package/
+      - name: Test package
+        uses: game-ci/unity-test-runner@0ff419b913a3630032cbe0de48a0099b5a9f0ed9
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          customImage: unityci/editor@sha256:6eaf40ea9a5f1daba68fdfbd50fddaac7855a21a0eb13539ba212fd9b892211f
+          packageMode: true
+          projectPath: .ci/package
+          testMode: ${{ matrix.testMode }}
+          unityVersion: 2022.3.63f1
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          if-no-files-found: error
+          name: unity-${{ matrix.testMode }}
+          path: artifacts
+          retention-days: 7
