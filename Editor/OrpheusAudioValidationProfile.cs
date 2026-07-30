@@ -14,6 +14,8 @@ namespace Orpheus.Audio.Editor
         [SerializeField] private OrpheusAudioKeyManifest _keyManifest;
         [SerializeField] private GameObject _runtimeHostPrefab;
         [SerializeField] private SceneAsset[] _listenerScenes = Array.Empty<SceneAsset>();
+        [SerializeField] private OrpheusAudioAuthoringProfile _authoringProfile;
+        [SerializeField] private string _authoringEnrollmentGuid = string.Empty;
 
         internal int SchemaVersion => _schemaVersion;
         internal bool Enabled => _enabled;
@@ -22,6 +24,8 @@ namespace Orpheus.Audio.Editor
         internal OrpheusAudioKeyManifest KeyManifest => _keyManifest;
         internal GameObject RuntimeHostPrefab => _runtimeHostPrefab;
         internal int ListenerSceneCount => _listenerScenes == null ? 0 : _listenerScenes.Length;
+        internal OrpheusAudioAuthoringProfile AuthoringProfile => _authoringProfile;
+        internal string AuthoringEnrollmentGuid => _authoringEnrollmentGuid;
 
         internal SceneAsset GetListenerScene(int index)
         {

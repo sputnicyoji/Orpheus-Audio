@@ -98,6 +98,15 @@ namespace Orpheus.Audio.Editor
             return true;
         }
 
+        internal static void WriteExpectedNoRefresh(
+            string assemblyText,
+            string sourceText)
+        {
+            Directory.CreateDirectory(OutputDirectory);
+            WriteIfChanged(AssemblyPath, assemblyText ?? string.Empty);
+            WriteIfChanged(SourcePath, sourceText ?? string.Empty);
+        }
+
         private static bool AreValid(OrpheusAudioKeyManifestEntryValue[] entries)
         {
             if (entries == null)

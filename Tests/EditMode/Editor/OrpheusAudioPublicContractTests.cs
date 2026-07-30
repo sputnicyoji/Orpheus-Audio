@@ -39,6 +39,8 @@ namespace Orpheus.Audio.Editor.Tests
             typeof(OrpheusAudioRuntimeHost),
             typeof(OrpheusAudioSourceBank),
             typeof(OrpheusAudioKeyManifest),
+            typeof(OrpheusAudioModuleRecipe),
+            typeof(OrpheusAudioAuthoringProfile),
             typeof(OrpheusAudioValidationProfile)
         };
 
@@ -122,6 +124,13 @@ namespace Orpheus.Audio.Editor.Tests
                         serializedEnums,
                         typeof(OrpheusAudioKeyManifestEntry));
                 }
+                else if (owner == typeof(OrpheusAudioModuleRecipe))
+                {
+                    AddSerializedFields(
+                        actual,
+                        serializedEnums,
+                        typeof(OrpheusAudioModuleEventRecipe));
+                }
             }
 
             foreach (var enumType in serializedEnums)
@@ -155,6 +164,9 @@ namespace Orpheus.Audio.Editor.Tests
             AddExportedTypes(
                 exportedTypes,
                 typeof(OrpheusAudioKeyManifest).Assembly);
+            AddExportedTypes(
+                exportedTypes,
+                typeof(OrpheusAuthoringCompilationPolicy).Assembly);
 
             var actual = new List<string>();
             for (var index = 0; index < exportedTypes.Count; index++)
@@ -164,6 +176,27 @@ namespace Orpheus.Audio.Editor.Tests
 
             actual.Sort(StringComparer.Ordinal);
             return actual.ToArray();
+        }
+
+        [Test]
+        public void AuthoringCompiler_RemainsOutsidePublicContract()
+        {
+            var editorExports = typeof(OrpheusAudioKeyManifest)
+                .Assembly
+                .GetExportedTypes();
+
+            Assert.That(
+                Array.IndexOf(editorExports, typeof(OrpheusAudioAuthoringCompiler)),
+                Is.EqualTo(-1));
+            Assert.That(
+                Array.IndexOf(editorExports, typeof(OrpheusAudioAuthoringCompileMode)),
+                Is.EqualTo(-1));
+            Assert.That(
+                Array.IndexOf(editorExports, typeof(OrpheusAudioAuthoringCompileStatus)),
+                Is.EqualTo(-1));
+            Assert.That(
+                Array.IndexOf(editorExports, typeof(OrpheusAudioAuthoringCompileResult)),
+                Is.EqualTo(-1));
         }
 
         private static void AddSerializedFields(

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "inputFingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "outputFingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "manifestSnapshot": [
+    {"id":10,"symbol":"UI_BACK","status":1}
+  ],
+  "identityConflicts": [
+    {"code":22,"key":10,"moduleId":"ui","symbol":"UI_BACK","assetPath":"Assets/Audio/back.wav","clipIndex":0,"detail":"quote \" slash \\ newline\n"}
+  ],
+  "catalogClosure": [
+    {"key":10,"symbol":"UI_BACK","eventGuid":"55555555555555555555555555555555","eventPath":"Assets/GeneratedAudio/Events/AE_UI_BACK.asset"}
+  ],
+  "clipClosure": [
+    {"key":10,"symbol":"UI_BACK","clipIndex":0,"guid":"66666666666666666666666666666666","localFileId":2800000,"path":"Assets/Audio/二/back.wav"}
+  ],
+  "ownership": [
+    {"kind":"event","moduleId":"ui","symbol":"UI_BACK","key":10,"guid":"55555555555555555555555555555555","path":"Assets/GeneratedAudio/Events/AE_UI_BACK.asset"}
+  ],
+  "orphans": [],
+  "futureDeliveryProjection": [
+    {"moduleId":"ui","profileHint":"menu","candidateContentBankId":"base","key":10,"symbol":"UI_BACK"}
+  ]
+}

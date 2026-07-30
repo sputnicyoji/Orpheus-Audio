@@ -53,7 +53,7 @@ namespace Orpheus.Audio.Editor
                 }
 
                 errors.AddRange(OrpheusAudioValidator.ValidateProfile(
-                    profile, targetGroup, projectionPaths));
+                    profile, targetGroup, projectionPaths, profiles));
                 var manifest = profile.KeyManifest;
                 if (manifest == null)
                 {

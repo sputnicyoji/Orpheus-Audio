@@ -22,6 +22,34 @@ namespace Orpheus.Audio.Editor
             BuildTargetGroup targetGroup,
             OrpheusAudioTypedKeyProjectionPaths projectionPaths)
         {
+            return ValidateProfile(
+                profile,
+                targetGroup,
+                projectionPaths,
+                OrpheusAudioValidationProfileDiscovery.Discover());
+        }
+
+        internal static List<OrpheusAudioValidationError> ValidateProfile(
+            OrpheusAudioValidationProfile profile,
+            BuildTargetGroup targetGroup,
+            OrpheusAudioTypedKeyProjectionPaths projectionPaths,
+            OrpheusAudioValidationProfile[] discoveredProfiles)
+        {
+            return ValidateProfile(
+                profile,
+                targetGroup,
+                projectionPaths,
+                discoveredProfiles,
+                true);
+        }
+
+        internal static List<OrpheusAudioValidationError> ValidateProfile(
+            OrpheusAudioValidationProfile profile,
+            BuildTargetGroup targetGroup,
+            OrpheusAudioTypedKeyProjectionPaths projectionPaths,
+            OrpheusAudioValidationProfile[] discoveredProfiles,
+            bool validateCommittedAuthoringState)
+        {
             var errors = new List<OrpheusAudioValidationError>();
             if (profile == null)
             {
@@ -90,6 +118,14 @@ namespace Orpheus.Audio.Editor
                 profile.RuntimeHostPrefab, profilePath, errors);
             OrpheusAudioIntegrationValidation.ValidateListenerScenes(
                 profile, profilePath, errors);
+            if (validateCommittedAuthoringState)
+            {
+                errors.AddRange(
+                    OrpheusAudioAuthoringReadOnlyValidation.Validate(
+                        profile,
+                        targetGroup,
+                        discoveredProfiles));
+            }
 
             return errors;
         }

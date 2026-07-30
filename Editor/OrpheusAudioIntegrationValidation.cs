@@ -4,10 +4,8 @@ using System.IO;
 using System.Text;
 using Orpheus.Audio.Core;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 
 namespace Orpheus.Audio.Editor
 {
@@ -702,7 +700,9 @@ namespace Orpheus.Audio.Editor
                     continue;
                 }
 
-                if (!CanOpenListenerScene(scenePath))
+                // Spec assigns Listener scene loadability to PlayMode/sample gates.
+                // Editor validation only proves a non-empty, readable Scene asset file.
+                if (!CanReadSceneFile(scenePath))
                 {
                     Add(errors, OrpheusAudioValidationErrorCode.UnloadableListenerScene,
                         profilePath, scenePath, sceneIndex);
@@ -726,64 +726,6 @@ namespace Orpheus.Audio.Editor
             return OrpheusAudioValidationErrorCode.None;
         }
 
-        private static bool CanOpenListenerScene(string scenePath)
-        {
-            if (!CanReadSceneFile(scenePath))
-            {
-                return false;
-            }
-
-            var originalSetup = EditorSceneManager.GetSceneManagerSetup();
-            var scene = SceneManager.GetSceneByPath(scenePath);
-            if (scene.IsValid() && scene.isLoaded)
-            {
-                return true;
-            }
-
-            scene = default(Scene);
-            var valid = false;
-            try
-            {
-                scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
-                valid = scene.IsValid() && scene.isLoaded;
-            }
-            catch (Exception exception) when (!OrpheusAudioManager.IsCatastrophic(exception))
-            {
-                valid = false;
-            }
-            finally
-            {
-                if (scene.IsValid())
-                {
-                    try
-                    {
-                        EditorSceneManager.CloseScene(scene, true);
-                    }
-                    catch (Exception exception) when (!OrpheusAudioManager.IsCatastrophic(exception))
-                    {
-                        valid = false;
-                    }
-                }
-
-                if (!HasSameSceneSetup(
-                        originalSetup,
-                        EditorSceneManager.GetSceneManagerSetup()))
-                {
-                    valid = false;
-                    try
-                    {
-                        EditorSceneManager.RestoreSceneManagerSetup(originalSetup);
-                    }
-                    catch (Exception exception) when (!OrpheusAudioManager.IsCatastrophic(exception))
-                    {
-                        valid = false;
-                    }
-                }
-            }
-
-            return valid;
-        }
-
         private static bool CanReadSceneFile(string scenePath)
         {
             try
@@ -801,27 +743,6 @@ namespace Orpheus.Audio.Editor
             {
                 return false;
             }
-        }
-
-        private static bool HasSameSceneSetup(SceneSetup[] expected, SceneSetup[] actual)
-        {
-            if (expected == null || actual == null || expected.Length != actual.Length)
-            {
-                return false;
-            }
-
-            for (var index = 0; index < expected.Length; index++)
-            {
-                if (!string.Equals(expected[index].path, actual[index].path,
-                        StringComparison.Ordinal) ||
-                    expected[index].isLoaded != actual[index].isLoaded ||
-                    expected[index].isActive != actual[index].isActive)
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         private static void ValidateExposedParameters(

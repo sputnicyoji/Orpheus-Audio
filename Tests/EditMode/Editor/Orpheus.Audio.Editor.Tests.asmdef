@@ -3,6 +3,7 @@
   "rootNamespace": "Orpheus.Audio.Editor.Tests",
   "references": [
     "Orpheus.Audio.Editor",
+    "Orpheus.Audio.Editor.Core",
     "Orpheus.Audio",
     "Orpheus.Audio.Core",
     "Orpheus.Audio.TestFixtures"

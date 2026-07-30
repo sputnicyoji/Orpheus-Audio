@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-30
+
+- Added public Editor-only Audio Module Recipe and Audio Authoring Profile
+  assets.
+- Added deterministic Analyze, explicit enrollment acceptance, transactional
+  Compile, ownership, closure, and machine-report workflows.
+- Added Manifest-authored same-ID symbol rename support. Generated source and
+  Event paths change while Audio Key identity, numeric value, and Event GUID
+  remain stable.
+- Added repeat-run, rollback recovery, `1024`-key compiler, and clean-consumer
+  authoring evidence.
+- Kept compiler orchestration internal and retained existing runtime behavior
+  and platform support claims.
+
 ## [0.2.2] - 2026-07-28
 
 - Corrected Settings duration documentation to the enforced `0.015s..5s`

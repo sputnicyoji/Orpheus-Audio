@@ -22,6 +22,8 @@ namespace Orpheus.Audio.Editor.Tests
 
             Assert.That(fields, Is.EqualTo(new[]
             {
+                "_authoringEnrollmentGuid",
+                "_authoringProfile",
                 "_catalog",
                 "_enabled",
                 "_keyManifest",

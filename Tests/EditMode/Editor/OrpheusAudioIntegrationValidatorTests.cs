@@ -84,6 +84,60 @@ namespace Orpheus.Audio.Editor.Tests
         }
 
         [Test]
+        public void PendingAuthoringProfile_IsReadOnlyAndBlocksBuild()
+        {
+            var fixture = CreateFixture(BankDefect.None, true);
+            var authoring =
+                ScriptableObject.CreateInstance<OrpheusAudioAuthoringProfile>();
+            OrpheusAudioEditorContractTests.SetField(
+                authoring,
+                "_keyManifest",
+                fixture.Profile.KeyManifest);
+            OrpheusAudioEditorContractTests.SetField(
+                authoring,
+                "_catalog",
+                fixture.Profile.Catalog);
+            OrpheusAudioEditorContractTests.SetField(
+                authoring,
+                "_generatedRoot",
+                TemporaryRoot + "/Generated");
+            AssetDatabase.CreateAsset(
+                authoring,
+                TemporaryRoot + "/Authoring.asset");
+            OrpheusAudioEditorContractTests.SetField(
+                fixture.Profile,
+                "_authoringProfile",
+                authoring);
+            OrpheusAudioEditorContractTests.SetField(
+                fixture.Profile,
+                "_authoringEnrollmentGuid",
+                string.Empty);
+            AssetDatabase.SaveAssets();
+
+            var before = File.ReadAllBytes(
+                AssetDatabase.GetAssetPath(fixture.Profile));
+            var errors = Validate(fixture.Profile);
+            Assert.That(
+                errors.Select(error => error.Code),
+                Does.Contain(
+                    OrpheusAudioValidationErrorCode.InvalidAuthoringProfile));
+            CollectionAssert.AreEqual(
+                before,
+                File.ReadAllBytes(
+                    AssetDatabase.GetAssetPath(fixture.Profile)));
+
+            var exception = Assert.Throws<BuildFailedException>(
+                () => OrpheusAudioBuildPreprocessor.ValidateOrThrow(
+                    BuildTarget.StandaloneWindows64,
+                    new[] { fixture.Profile },
+                    ProjectionPaths));
+            StringAssert.Contains(
+                OrpheusAudioValidationErrorCode.InvalidAuthoringProfile
+                    .ToString(),
+                exception.Message);
+        }
+
+        [Test]
         public void DurationBoundaries_AreInclusiveForEverySerializedDuration()
         {
             var fixture = CreateFixture(BankDefect.None, true);
@@ -370,6 +424,49 @@ namespace Orpheus.Audio.Editor.Tests
                 if (existing.IsValid())
                 {
                     EditorSceneManager.CloseScene(existing, true);
+                }
+            }
+        }
+
+        [Test]
+        public void ListenerSceneUnloadedInSceneSetup_IsValid()
+        {
+            var fixture = CreateFixture(BankDefect.None, true);
+            var scenePath = AssetDatabase.GetAssetPath(fixture.ListenerScene);
+            var previousActive = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            var anchor = EditorSceneManager.OpenScene(
+                EmptySceneFixturePath,
+                OpenSceneMode.Additive);
+            UnityEngine.SceneManagement.Scene unloaded = default;
+            try
+            {
+                Assert.That(
+                    UnityEngine.SceneManagement.SceneManager.SetActiveScene(anchor),
+                    Is.True);
+                unloaded = EditorSceneManager.OpenScene(
+                    scenePath,
+                    OpenSceneMode.AdditiveWithoutLoading);
+                var before = EditorSceneManager.GetSceneManagerSetup();
+
+                Assert.That(Validate(fixture.Profile), Is.Empty);
+
+                AssertSceneSetupEqual(before, EditorSceneManager.GetSceneManagerSetup());
+            }
+            finally
+            {
+                if (previousActive.IsValid() && previousActive.isLoaded)
+                {
+                    UnityEngine.SceneManagement.SceneManager.SetActiveScene(previousActive);
+                }
+
+                if (unloaded.IsValid())
+                {
+                    EditorSceneManager.CloseScene(unloaded, true);
+                }
+
+                if (anchor.IsValid())
+                {
+                    EditorSceneManager.CloseScene(anchor, true);
                 }
             }
         }

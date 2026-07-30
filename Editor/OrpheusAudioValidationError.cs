@@ -64,7 +64,14 @@ namespace Orpheus.Audio.Editor
         UnresolvedListenerScene = 59,
         InvalidListenerSceneType = 60,
         UnloadableListenerScene = 61,
-        SourceBankLeafOutsideBank = 62
+        SourceBankLeafOutsideBank = 62,
+        InvalidAuthoringProfile = 63,
+        StaleGeneratedOwnership = 64,
+        AuthoringEnrollmentIdentityMismatch = 65,
+        LostAuthoringOwnership = 66,
+        GeneratedCatalogMismatch = 67,
+        StaleAuthoringInput = 68,
+        AuthoringOutputFingerprintMismatch = 69
     }
 
     internal readonly struct OrpheusAudioValidationError

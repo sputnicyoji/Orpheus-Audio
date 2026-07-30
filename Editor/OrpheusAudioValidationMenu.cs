@@ -5,6 +5,8 @@ namespace Orpheus.Audio.Editor
 {
     internal static class OrpheusAudioValidationMenu
     {
+        // Reports only: Debug.LogError does not affect process exit code.
+        // The build gate that fails the build is OrpheusAudioBuildPreprocessor.ThrowIfErrors.
         [MenuItem("Tools/Orpheus/Validate Audio Profiles")]
         private static void ValidateProfiles()
         {
