@@ -13,7 +13,7 @@ policy core.
 | Android | Experimental |
 | iOS, macOS, WebGL, other platforms | Unsupported until verified |
 
-Package `0.3.1` declares Public Contract v1. It remains pre-`1.0`.
+Package `0.3.2` declares Public Contract v1. It remains pre-`1.0`.
 
 ## Install
 
@@ -26,7 +26,7 @@ system `PATH`.
 ```json
 {
   "dependencies": {
-    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.1"
+    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.2"
   }
 }
 ```

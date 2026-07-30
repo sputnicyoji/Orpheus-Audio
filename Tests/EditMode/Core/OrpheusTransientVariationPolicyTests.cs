@@ -76,6 +76,52 @@ namespace Orpheus.Audio.Core.Tests
         }
 
         [Test]
+        public void SampleClip_SixteenClipRoundsStayPermutationsInsideByteEncoding()
+        {
+            const int clipCount = 16;
+            var random = new OrpheusXorshift32(4242u);
+            var order = new byte[clipCount];
+            var cursors = new byte[] { byte.MaxValue };
+            var previousLast = new byte[] { byte.MaxValue };
+            var expected = new int[clipCount];
+            for (var index = 0; index < clipCount; index++)
+            {
+                expected[index] = index;
+            }
+
+            var previousRoundLastClip = -1;
+            for (var round = 0; round < 8; round++)
+            {
+                var observed = new int[clipCount];
+                for (var index = 0; index < clipCount; index++)
+                {
+                    observed[index] = OrpheusTransientVariationPolicy.SampleClipIndex(
+                        0,
+                        0,
+                        clipCount,
+                        order,
+                        cursors,
+                        previousLast,
+                        ref random);
+                }
+
+                CollectionAssert.AreEquivalent(expected, observed);
+                Assert.That(observed[0], Is.Not.EqualTo(previousRoundLastClip));
+
+                // A completed round leaves the cursor at clipCount. The raised
+                // ceiling stays legal only while that value cannot reach the
+                // UninitializedCursor sentinel.
+                Assert.That(cursors[0], Is.EqualTo((byte)clipCount));
+                Assert.That(
+                    cursors[0],
+                    Is.Not.EqualTo(OrpheusTransientVariationPolicy.UninitializedCursor));
+                Assert.That(previousLast[0], Is.LessThan((byte)clipCount));
+
+                previousRoundLastClip = observed[clipCount - 1];
+            }
+        }
+
+        [Test]
         public void FixedClipAndScalarRangesDoNotConsumeRandomState()
         {
             var random = new OrpheusXorshift32(97u);

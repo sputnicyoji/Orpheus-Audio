@@ -26,7 +26,7 @@ Generate typed keys before adding that final reference to a new Host.
 
 ## Public Contract v1
 
-Package `0.3.1` freezes the supported owners listed below, their method
+Package `0.3.2` freezes the supported owners listed below, their method
 signatures, serialized Host asset fields, and the deterministic generated
 `OrpheusAudioKeys` shape. Types not exposed by those owners are implementation
 details. Do not construct Catalog entries, authoring policy values, clip

@@ -1,6 +1,6 @@
 # Orpheus Playable One Shot
 
-This package `0.3.1` sample is the shortest verified path from package import
+This package `0.3.2` sample is the shortest verified path from package import
 to audible playback. It owns one Audio Session, one Listener, and one validated
 `OneShot2D` Event. Its code uses only the supported consumer contract.
 
