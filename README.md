@@ -13,7 +13,7 @@ policy core.
 | Android | Experimental |
 | iOS, macOS, WebGL, other platforms | Unsupported until verified |
 
-Package `0.2.2` declares Public Contract v1. It remains pre-`1.0`.
+Package `0.3.0` declares Public Contract v1. It remains pre-`1.0`.
 
 ## Install
 
@@ -26,7 +26,7 @@ system `PATH`.
 ```json
 {
   "dependencies": {
-    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.2.2"
+    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.0"
   }
 }
 ```
@@ -60,6 +60,11 @@ Unity resolves `file:` from the consuming project's `Packages` directory.
 4. Run `Tools > Orpheus > Validate Audio Profiles`.
 5. Open `PlayableOneShot.unity` and enter Play Mode.
 
+For recipe-driven generation, assign an Audio Authoring Profile to the enabled
+Validation Profile. Analyze first. Then explicitly accept enrollment before
+using the enrolled compile commands. See
+[Authoring and Validation](Documentation~/authoring-and-validation.md).
+
 The separate `Minimal Setup` sample is intentionally silent. It demonstrates
 session ownership, Listener handoff, persisted gains, and teardown without
 production content.
@@ -86,6 +91,7 @@ Supported consumer owners:
 - `OrpheusAudioEvent`, `OrpheusAudioCatalog`, `OrpheusAudioSettings`, and
   `OrpheusAudioSourceBank`;
 - `OrpheusAudioKeyManifest` and `OrpheusAudioValidationProfile`;
+- `OrpheusAudioModuleRecipe` and `OrpheusAudioAuthoringProfile`;
 - generated `OrpheusAudioKeys`;
 - public Core values required by those owners.
 
@@ -93,8 +99,12 @@ The checked-in
 [public API baseline](Tests/Baselines/PublicApi.v1.txt),
 [serialization ABI baseline](Tests/Baselines/SerializationAbi.v1.txt), and
 [generated-key golden](Tests/Baselines/GeneratedKeys.v1.golden.cs.txt) define
-the `0.2` compatibility line. Other Core policy and authoring types are package
+the `0.3` compatibility line. Other Core policy and authoring types are package
 implementation details.
+
+Compiler modes, orchestration, transaction recovery, and machine reports are
+package-internal. The public repository is generated release output, not an
+independent authoring source.
 
 ## Runtime boundaries
 

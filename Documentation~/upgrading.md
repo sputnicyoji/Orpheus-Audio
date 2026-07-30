@@ -5,8 +5,8 @@ the [Changelog](../CHANGELOG.md) before changing the dependency.
 
 ## Compatibility policy
 
-- Package `0.2.x` declares Public Contract v1.
-- `0.2.x` permits compatible fixes.
+- Package `0.3.x` declares Public Contract v1.
+- `0.3.x` permits compatible fixes.
 - Public Contract v1 members are not removed or changed incompatibly before
   `1.0.0`.
 - Serialized asset field identities and generated-key shape are part of the
@@ -33,6 +33,27 @@ Tests/Baselines/GeneratedKeys.v1.golden.cs.txt
 8. Verify supported target platforms before release.
 
 Do not rewrite package-owned serialized fields through reflection.
+
+## `0.2.2` to `0.3.0`
+
+`0.3.0` adds the public Editor-only `OrpheusAudioModuleRecipe` and
+`OrpheusAudioAuthoringProfile` asset contracts. Runtime behavior and existing
+serialized Host assets remain compatible. Compiler orchestration, modes,
+transactions, and reports remain internal.
+
+To enroll existing manual content:
+
+1. keep existing manual Events untouched;
+2. create recipes and a separate generated root;
+3. assign the Authoring Profile with an empty enrollment GUID;
+4. Analyze and review the proposed Manifest baseline, ownership, and diff;
+5. explicitly accept and compile enrollment;
+6. review generated output, validate, run build lint, and commit recipes plus
+   generated outputs together.
+
+Enrollment has no v1 undo. A Manifest-authored same-ID symbol rename changes
+the generated member and Event path without changing the numeric Audio Key or
+Event GUID. No old-member alias is emitted.
 
 ## `0.2.1` to `0.2.2`
 

@@ -2,12 +2,12 @@
 
 ## Supported versions
 
-Security fixes target the current `0.2.x` compatibility line.
+Security fixes target the current `0.3.x` compatibility line.
 
 | Version | Supported |
 | --- | --- |
-| `0.2.x` | Yes |
-| `< 0.2` | No |
+| `0.3.x` | Yes |
+| `< 0.3` | No |
 
 ## Report a vulnerability
 

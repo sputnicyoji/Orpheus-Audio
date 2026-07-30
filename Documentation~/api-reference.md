@@ -1,7 +1,7 @@
 # API Reference
 
 This task-oriented reference covers the supported consumer owners in package
-`0.2.2`. The checked-in API baseline is the exhaustive signature contract.
+`0.3.0`. The checked-in API baseline is the exhaustive signature contract.
 All runtime calls are main-thread-only unless stated otherwise. Invalid calls
 reject deterministically and degrade to silence.
 
@@ -456,6 +456,9 @@ See [Diagnostics and Troubleshooting](diagnostics-and-troubleshooting.md).
 | `OrpheusAudioSourceBank` | Fixed 24-source physical bank |
 | `OrpheusAudioKeyManifest` | Host Audio Key truth |
 | `OrpheusAudioValidationProfile` | One validated Host integration set |
+| `OrpheusAudioModuleRecipe` | Editor-only module grouping for generated Events |
+| `OrpheusAudioModuleEventRecipe` | Serialized Event input inside a Module Recipe |
+| `OrpheusAudioAuthoringProfile` | Enrollment input binding Manifest, Recipes, Catalog, and generated root |
 
 See [Authoring and Validation](authoring-and-validation.md) for asset rules.
 

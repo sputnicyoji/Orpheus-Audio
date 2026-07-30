@@ -504,10 +504,29 @@ function Assert-OrpheusCoreIsolation {
     $coreRoot = Join-Path $RepositoryRoot "Runtime/Core"
     foreach ($asmdefPath in Get-ChildItem -LiteralPath $coreRoot -Recurse -Filter "*.asmdef" -File) {
         $asmdef = Read-OrpheusJson -Path $asmdefPath.FullName -Label $asmdefPath.Name
+        $includePlatformsProperty = $asmdef.PSObject.Properties["includePlatforms"]
+        $includePlatforms = @(
+            if ($null -ne $includePlatformsProperty) {
+                $includePlatformsProperty.Value
+            }
+        )
+        $referencesProperty = $asmdef.PSObject.Properties["references"]
+        $references = @(
+            if ($null -ne $referencesProperty) {
+                $referencesProperty.Value
+            }
+        )
+        $noEngineReferencesProperty = $asmdef.PSObject.Properties["noEngineReferences"]
+        $noEngineReferences = if ($null -ne $noEngineReferencesProperty) {
+            $noEngineReferencesProperty.Value
+        }
+        else {
+            $false
+        }
         if (
-            $asmdef.noEngineReferences -ne $true -or
-            @($asmdef.references).Count -ne 0 -or
-            @($asmdef.includePlatforms) -contains "Editor"
+            $noEngineReferences -ne $true -or
+            $references.Count -ne 0 -or
+            $includePlatforms -contains "Editor"
         ) {
             throw "Runtime/Core must have no Unity runtime or Editor dependency: $($asmdefPath.Name)"
         }

@@ -3,7 +3,8 @@
   "rootNamespace": "Orpheus.Audio.Editor",
   "references": [
     "Orpheus.Audio",
-    "Orpheus.Audio.Core"
+    "Orpheus.Audio.Core",
+    "Orpheus.Audio.Editor.Core"
   ],
   "includePlatforms": [
     "Editor"

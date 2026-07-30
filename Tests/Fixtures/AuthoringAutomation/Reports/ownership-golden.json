@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "ownerAuthoringProfileGuid": "11111111111111111111111111111111",
+  "enrolledValidationProfileGuid": "22222222222222222222222222222222",
+  "manifestGuid": "33333333333333333333333333333333",
+  "catalogGuid": "44444444444444444444444444444444",
+  "generatedRoot": "Assets/GeneratedAudio",
+  "acceptedManifestSnapshot": [
+    {"id":10,"symbol":"UI_BACK","status":1},
+    {"id":20,"symbol":"VOICE_\"二\"","status":3}
+  ],
+  "artifacts": [
+    {"kind":"event","moduleId":"ui","symbol":"UI_BACK","key":10,"guid":"55555555555555555555555555555555","path":"Assets/GeneratedAudio/Events/AE_UI_BACK.asset"},
+    {"kind":"catalog","moduleId":"","symbol":"","key":0,"guid":"44444444444444444444444444444444","path":"Assets/GeneratedAudio/OrpheusAudioCatalog.asset"},
+    {"kind":"typed-key-assembly","moduleId":"","symbol":"","key":0,"guid":"88888888888888888888888888888888","path":"Assets/OrpheusGenerated/Orpheus.Audio.Generated.asmdef"},
+    {"kind":"typed-key-source","moduleId":"","symbol":"","key":0,"guid":"77777777777777777777777777777777","path":"Assets/OrpheusGenerated/OrpheusAudioKeys.g.cs"},
+    {"kind":"ownership","moduleId":"","symbol":"","key":0,"guid":"","path":"Assets/GeneratedAudio/OrpheusAuthoringOwnership.json"},
+    {"kind":"closure","moduleId":"","symbol":"","key":0,"guid":"","path":"Assets/GeneratedAudio/OrpheusAuthoringClosure.json"}
+  ]
+}

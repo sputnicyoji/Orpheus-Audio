@@ -135,6 +135,93 @@ namespace Orpheus.Audio.Editor.Tests
         }
 
         [Test]
+        public void TransactionValidation_SkipsOnlySelectedUncommittedAuthoringState()
+        {
+            var clip = CreateImportedClip("TransactionCue.wav");
+            ConfigureImporter(
+                clip,
+                AudioClipLoadType.DecompressOnLoad,
+                true,
+                false,
+                false);
+            var audioEvent =
+                CreateEventAsset("AE_TransactionCue.asset", 100, clip);
+            var catalog = CreateAsset<OrpheusAudioCatalog>(
+                "TransactionCatalog.asset");
+            OrpheusAudioEditorContractTests.SetField(
+                catalog,
+                "_events",
+                new[] { audioEvent });
+            var settings =
+                CreateAsset<OrpheusAudioSettings>("TransactionSettings.asset");
+            var manifest =
+                CreateAsset<OrpheusAudioKeyManifest>("TransactionManifest.asset");
+            OrpheusAudioEditorContractTests.SetField(
+                manifest,
+                "_entries",
+                new[]
+                {
+                    OrpheusAudioEditorContractTests.CreateEntry(
+                        100,
+                        "TransactionCue",
+                        OrpheusAudioKeyStatus.Active)
+                });
+            EditorUtility.SetDirty(catalog);
+            EditorUtility.SetDirty(manifest);
+            AssetDatabase.SaveAssets();
+            WriteCurrentProjection(manifest);
+
+            var authoring =
+                CreateAsset<OrpheusAudioAuthoringProfile>("Authoring.asset");
+            OrpheusAudioEditorContractTests.SetField(
+                authoring,
+                "_keyManifest",
+                manifest);
+            OrpheusAudioEditorContractTests.SetField(
+                authoring,
+                "_catalog",
+                catalog);
+            OrpheusAudioEditorContractTests.SetField(
+                authoring,
+                "_generatedRoot",
+                TemporaryRoot + "/Generated");
+            var profile = CreateProfile(true, settings, catalog, manifest);
+            AssetDatabase.CreateAsset(
+                profile,
+                TemporaryRoot + "/Validation.asset");
+            OrpheusAudioEditorContractTests.SetField(
+                profile,
+                "_authoringProfile",
+                authoring);
+            OrpheusAudioEditorContractTests.SetField(
+                profile,
+                "_authoringEnrollmentGuid",
+                AssetDatabase.AssetPathToGUID(
+                    AssetDatabase.GetAssetPath(authoring)).ToLowerInvariant());
+            EditorUtility.SetDirty(profile);
+            AssetDatabase.SaveAssets();
+
+            var transactionErrors = OrpheusAudioValidator.ValidateProfile(
+                profile,
+                BuildTargetGroup.Standalone,
+                ProjectionPaths,
+                new[] { profile },
+                false);
+            var committedErrors = OrpheusAudioValidator.ValidateProfile(
+                profile,
+                BuildTargetGroup.Standalone,
+                ProjectionPaths,
+                new[] { profile });
+
+            Assert.That(transactionErrors, Is.Empty);
+            Assert.That(
+                committedErrors.Select(error => error.Code),
+                Does.Contain(
+                    OrpheusAudioValidationErrorCode
+                        .GeneratedCatalogMismatch));
+        }
+
+        [Test]
         public void ProjectionMissingAndStaleBothBlockValidation()
         {
             var settings = ScriptableObject.CreateInstance<OrpheusAudioSettings>();

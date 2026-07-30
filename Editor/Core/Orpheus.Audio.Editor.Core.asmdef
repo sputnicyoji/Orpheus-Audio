@@ -1,0 +1,12 @@
+{
+  "name": "Orpheus.Audio.Editor.Core",
+  "rootNamespace": "Orpheus.Audio.Editor",
+  "references": [
+    "Orpheus.Audio.Core"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": false,
+  "noEngineReferences": true
+}
