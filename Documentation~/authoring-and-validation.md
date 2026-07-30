@@ -4,7 +4,7 @@ The Host Manifest, Audio Events, Catalog, Settings, Runtime Host prefab, and
 Listener Scenes form one validated authoring set. Runtime never scans the
 project to discover content.
 
-Public Contract v1 in package `0.3.0` freezes the serialized field identities
+Public Contract v1 in package `0.3.1` freezes the serialized field identities
 for these Host assets. Upgrade through the package changelog and migration
 guide. Do not rename fields or rewrite package assets through reflection.
 

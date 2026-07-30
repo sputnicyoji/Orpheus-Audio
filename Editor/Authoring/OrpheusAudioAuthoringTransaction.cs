@@ -357,6 +357,7 @@ namespace Orpheus.Audio.Editor
             }
 
             var pending = new List<JournalValue>();
+            var terminal = new List<JournalValue>();
             for (var index = 0; index < journals.Length; index++)
             {
                 if (!TryReadJournal(journals[index], out var value))
@@ -378,6 +379,10 @@ namespace Orpheus.Audio.Editor
                 {
                     pending.Add(value);
                 }
+                else
+                {
+                    terminal.Add(value);
+                }
             }
 
             if (pending.Count > 1)
@@ -385,6 +390,18 @@ namespace Orpheus.Audio.Editor
                 LastFailureForTests =
                     "RecoveryAmbiguous:" + pending.Count;
                 PersistRecoveryBlocker(root);
+                return false;
+            }
+
+            for (var index = 0; index < terminal.Count; index++)
+            {
+                if (TryDeleteSuccessfulTerminalJournal(terminal[index].Path))
+                {
+                    continue;
+                }
+
+                LastFailureForTests =
+                    "RecoveryTerminalCleanup:" + terminal[index].Path;
                 return false;
             }
 
@@ -417,14 +434,26 @@ namespace Orpheus.Audio.Editor
             EditorApplication.LockReloadAssemblies();
             try
             {
-                return Rollback(
-                           candidate.Path,
-                           candidate.Id,
-                           candidate.Payload,
-                           snapshots,
-                           null,
-                           false) ==
-                       OrpheusAudioAuthoringCompileStatus.RolledBack;
+                if (Rollback(
+                        candidate.Path,
+                        candidate.Id,
+                        candidate.Payload,
+                        snapshots,
+                        null,
+                        false) !=
+                    OrpheusAudioAuthoringCompileStatus.RolledBack)
+                {
+                    return false;
+                }
+
+                if (TryDeleteSuccessfulTerminalJournal(candidate.Path))
+                {
+                    return true;
+                }
+
+                LastFailureForTests =
+                    "RecoveryTerminalCleanup:" + candidate.Path;
+                return false;
             }
             finally
             {
@@ -2644,6 +2673,57 @@ namespace Orpheus.Audio.Editor
             catch (Exception exception) when (!IsCatastrophic(exception))
             {
                 journals = Array.Empty<string>();
+                return false;
+            }
+        }
+
+        private static bool TryDeleteSuccessfulTerminalJournal(
+            string journalPath)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(journalPath) ||
+                    !string.Equals(
+                        Path.GetFileName(journalPath),
+                        "journal.json",
+                        StringComparison.Ordinal))
+                {
+                    return false;
+                }
+
+                var directory = Path.GetDirectoryName(
+                    Path.GetFullPath(journalPath));
+                if (string.IsNullOrEmpty(directory) ||
+                    !Directory.Exists(directory) ||
+                    !IsLowerGuid(Path.GetFileName(directory)) ||
+                    (File.GetAttributes(directory) &
+                     FileAttributes.ReparsePoint) != 0 ||
+                    !File.Exists(journalPath) ||
+                    (File.GetAttributes(journalPath) &
+                     FileAttributes.ReparsePoint) != 0)
+                {
+                    return false;
+                }
+
+                var entries = Directory.GetFileSystemEntries(
+                    directory,
+                    "*",
+                    SearchOption.TopDirectoryOnly);
+                if (entries.Length != 1 ||
+                    !string.Equals(
+                        Path.GetFullPath(entries[0]),
+                        Path.GetFullPath(journalPath),
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                File.Delete(journalPath);
+                Directory.Delete(directory, false);
+                return !Directory.Exists(directory);
+            }
+            catch (Exception exception) when (!IsCatastrophic(exception))
+            {
                 return false;
             }
         }
