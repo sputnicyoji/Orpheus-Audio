@@ -327,7 +327,7 @@ namespace Orpheus.Audio.Core.Tests
                 OrpheusPlaybackKind.OneShot3D,
                 OrpheusCategory.Music,
                 OrpheusLoadPolicy.PersistentStream,
-                9,
+                17,
                 0.8f,
                 0.2f,
                 2f,
@@ -379,6 +379,85 @@ namespace Orpheus.Audio.Core.Tests
             Assert.That(mismatch.HasFlag(OrpheusAudioEventPolicyMismatch.PersistentVolume), Is.True);
             Assert.That(mismatch.HasFlag(OrpheusAudioEventPolicyMismatch.PersistentPitch), Is.True);
             Assert.That(mismatch.HasFlag(OrpheusAudioEventPolicyMismatch.PersistentCooldown), Is.True);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(1, true)]
+        [TestCase(8, true)]
+        [TestCase(9, true)]
+        [TestCase(15, true)]
+        [TestCase(16, true)]
+        [TestCase(17, false)]
+        public void EventPolicy_BoundsTransientClipCountToSixteen(int clipCount, bool valid)
+        {
+            var values = CreateValues(
+                OrpheusPlaybackKind.OneShot2D,
+                OrpheusCategory.SfxUi,
+                OrpheusLoadPolicy.BootstrapTransient,
+                clipCount,
+                0.5f,
+                1f,
+                1f,
+                1f,
+                1,
+                0f,
+                1f,
+                100f,
+                OrpheusRolloffMode.Logarithmic);
+
+            AssertMismatch(
+                OrpheusAudioEventPolicy.Evaluate(values),
+                OrpheusAudioEventPolicyMismatch.ClipCount,
+                valid);
+        }
+
+        [TestCase(16, true)]
+        [TestCase(17, false)]
+        public void EventPolicy_AppliesTheClipCeilingToOneShot3D(int clipCount, bool valid)
+        {
+            var values = CreateValues(
+                OrpheusPlaybackKind.OneShot3D,
+                OrpheusCategory.SfxWorld,
+                OrpheusLoadPolicy.ExplicitTransient,
+                clipCount,
+                0.5f,
+                1f,
+                1f,
+                1f,
+                12,
+                0f,
+                1f,
+                100f,
+                OrpheusRolloffMode.Linear);
+
+            AssertMismatch(
+                OrpheusAudioEventPolicy.Evaluate(values),
+                OrpheusAudioEventPolicyMismatch.ClipCount,
+                valid);
+        }
+
+        [Test]
+        public void EventPolicy_StillRejectsMultiClipPersistentEventsInsideTheRaisedCeiling()
+        {
+            var values = CreateValues(
+                OrpheusPlaybackKind.Bgm,
+                OrpheusCategory.Music,
+                OrpheusLoadPolicy.PersistentStream,
+                16,
+                0.6f,
+                0.6f,
+                1f,
+                1f,
+                1,
+                0f,
+                1f,
+                100f,
+                OrpheusRolloffMode.Logarithmic);
+
+            var mismatch = OrpheusAudioEventPolicy.Evaluate(values);
+
+            AssertMismatch(mismatch, OrpheusAudioEventPolicyMismatch.ClipCount, true);
+            AssertMismatch(mismatch, OrpheusAudioEventPolicyMismatch.PersistentClipCount, false);
         }
 
         private static OrpheusAudioEventPolicyValues CreateValues(

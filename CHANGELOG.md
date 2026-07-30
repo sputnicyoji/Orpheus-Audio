@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-07-30
+
+- Raised the transient Audio Event clip-count ceiling from `8` to `16` for
+  `OneShot2D` and `OneShot3D`.
+- Kept persistent `GlobalLoop2D`, `Bgm`, and `ProfileAmbience` Events at
+  exactly one Clip.
+- Changed no public API, serialized asset ABI, generated-key shape, existing
+  clip-selection sequence, or platform support claim.
+
 ## [0.3.1] - 2026-07-30
 
 - Bounded successful authoring transaction journal retention to one terminal

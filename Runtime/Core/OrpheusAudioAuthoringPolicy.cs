@@ -316,6 +316,12 @@ namespace Orpheus.Audio.Core
 
     internal static class OrpheusAudioEventPolicy
     {
+        // Authored transient clip ceiling. The shuffle bag stores relative clip
+        // indices and per-entry cursors as bytes and reserves byte.MaxValue as
+        // the uninitialized-cursor sentinel, so a cursor reaching the clip count
+        // caps that encoding at 254. This bound is a product choice below it.
+        internal const int MaximumTransientClipCount = 16;
+
         internal static OrpheusAudioEventPolicyMismatch Evaluate(
             OrpheusAudioEventPolicyValues values)
         {
@@ -351,7 +357,7 @@ namespace Orpheus.Audio.Core
                 mismatch |= OrpheusAudioEventPolicyMismatch.LoadPolicy;
             }
 
-            if (values.ClipCount < 1 || values.ClipCount > 8)
+            if (values.ClipCount < 1 || values.ClipCount > MaximumTransientClipCount)
             {
                 mismatch |= OrpheusAudioEventPolicyMismatch.ClipCount;
             }

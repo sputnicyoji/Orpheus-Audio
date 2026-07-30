@@ -4,7 +4,7 @@ The Host Manifest, Audio Events, Catalog, Settings, Runtime Host prefab, and
 Listener Scenes form one validated authoring set. Runtime never scans the
 project to discover content.
 
-Public Contract v1 in package `0.3.1` freezes the serialized field identities
+Public Contract v1 in package `0.3.2` freezes the serialized field identities
 for these Host assets. Upgrade through the package changelog and migration
 guide. Do not rename fields or rewrite package assets through reflection.
 
@@ -105,7 +105,7 @@ Each `OrpheusAudioModuleEventRecipe` stores:
 | --- | --- |
 | `_symbol` | Active Manifest symbol owned by exactly one recipe |
 | `_playbackKind`, `_category`, `_loadPolicy` | Must satisfy the Audio Event playback matrix |
-| `_clips` | `1..8` unique, non-null clips with valid importer policy |
+| `_clips` | `1..16` unique, non-null clips with valid importer policy |
 | `_volumeMin`, `_volumeMax` | Finite ordered range inside `[0,1]` |
 | `_pitchMin`, `_pitchMax` | Finite ordered range inside `[0.5,2]` |
 | `_priority` | `0..255`; `0` is highest |
@@ -196,7 +196,7 @@ AE_<ManifestSymbol>.asset
 All Events require:
 
 - one valid Active key;
-- `1..8` unique, non-null Clips;
+- `1..16` unique, non-null Clips;
 - priority `0..255`, where `0` is highest and `255` is lowest;
 - volume range inside `[0,1]`;
 - pitch range inside `[0.5,2]`;
@@ -342,7 +342,7 @@ Code | ProfilePath | AssetPath | event=<index> | related=<index> | detail=<value
 | `MissingTypedKeyProjection`, `StaleTypedKeyProjection` | Select the active Manifest and run `Generate Typed Keys` |
 | `NullEvent`, `UnsortedCatalog`, `DuplicateEventKey` | Remove nulls, sort by key, and keep one Event per key |
 | `InvalidEventPolicy`, `EventKeyNotActive`, `MissingActiveEvent`, `InvalidEventAssetName` | Apply the playback matrix, activate the Manifest entry, add exactly one Event, and use `AE_<Symbol>.asset` |
-| `MissingClipReference`, `DuplicateClipReference` | Assign `1..8` distinct non-null Clips |
+| `MissingClipReference`, `DuplicateClipReference` | Assign `1..16` distinct non-null Clips |
 | `MissingAudioImporter`, `InvalidAudioImporterPolicy` | Reimport the Clip and apply the importer matrix |
 | `InvalidBgmCrossfadeDuration`, `InvalidProfileAmbienceCrossfadeDuration`, `InvalidSnapshotTransitionDuration` | Use finite Settings durations in `0.015s..5s` |
 | `MissingMixer`, `MissingMixerGroup`, `MissingMixerSnapshot`, `MismatchedMixerReference` | Assign one Mixer identity and every required group/snapshot from it |

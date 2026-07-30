@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "packageVersion": "0.3.1",
-  "privateSourceCommit": "48f777eb74e43c8e1ee7738793f640c26c0b11f0",
-  "packageTreeSha256": "59951d4aa51541cde647cd3768c76487b413f38b4853b8bf6c323b6a21b4583a"
+  "packageVersion": "0.3.2",
+  "privateSourceCommit": "df551c896367cba4b298c35d72a6260840fd0d1d",
+  "packageTreeSha256": "1cdc735ab5211b50da828b2ff7a43bf73af727c789e2d598304fc67da0e0e7ba"
 }

@@ -34,6 +34,18 @@ Tests/Baselines/GeneratedKeys.v1.golden.cs.txt
 
 Do not rewrite package-owned serialized fields through reflection.
 
+## `0.3.1` to `0.3.2`
+
+`0.3.2` raises the transient Audio Event clip-count ceiling from `8` to `16`.
+`OneShot2D` and `OneShot3D` Events may reference up to sixteen unique Clips.
+Persistent `GlobalLoop2D`, `Bgm`, and `ProfileAmbience` Events still require
+exactly one Clip.
+
+No public API, serialized asset ABI, generated-key shape, platform support
+claim, or clip-selection sequence for existing content changes. Every Event
+valid under `0.3.1` stays valid. An Event authored with nine or more Clips
+requires `0.3.2` or later and is rejected by `0.3.1`.
+
 ## `0.3.0` to `0.3.1`
 
 `0.3.1` bounds successful authoring transaction journal retention. The next
