@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-07-30
+
+- Bounded successful authoring transaction journal retention to one terminal
+  record between compiler invocations.
+- Pruned strictly validated `Committed` and `RolledBack` journals during
+  recovery while preserving `RollbackFailed`, foreign, and reparse-point
+  evidence fail-closed.
+
 ## [0.3.0] - 2026-07-30
 
 - Added public Editor-only Audio Module Recipe and Audio Authoring Profile

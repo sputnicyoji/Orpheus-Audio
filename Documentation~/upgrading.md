@@ -34,6 +34,16 @@ Tests/Baselines/GeneratedKeys.v1.golden.cs.txt
 
 Do not rewrite package-owned serialized fields through reflection.
 
+## `0.3.0` to `0.3.1`
+
+`0.3.1` bounds successful authoring transaction journal retention. The next
+Compile removes strictly validated `Committed` and `RolledBack` journals before
+starting a new transaction. `RollbackFailed`, malformed, foreign, and
+reparse-point evidence remains fail-closed.
+
+No public API, serialized asset ABI, generated-key shape, Runtime behavior, or
+platform support claim changes.
+
 ## `0.2.2` to `0.3.0`
 
 `0.3.0` adds the public Editor-only `OrpheusAudioModuleRecipe` and

@@ -351,15 +351,8 @@ namespace Orpheus.Audio.Editor.Tests
                     AssetDatabase.LoadMainAssetAtPath(assetPath),
                     Is.TypeOf<OrpheusAudioCatalog>());
                 Assert.That(
-                    OrpheusAudioAuthoringTransaction.TryReadJournalForTests(
-                        journal,
-                        out var phase,
-                        out _),
-                    Is.True);
-                Assert.That(
-                    phase,
-                    Is.EqualTo(
-                        OrpheusAudioAuthoringTransactionPhase.RolledBack));
+                    Directory.Exists(Path.GetDirectoryName(journal)),
+                    Is.False);
             }
             finally
             {
@@ -428,15 +421,9 @@ namespace Orpheus.Audio.Editor.Tests
                     interruptedPhase + ":" +
                     OrpheusAudioAuthoringTransaction.LastFailureForTests);
                 Assert.That(
-                    OrpheusAudioAuthoringTransaction.TryReadJournalForTests(
-                        interruptedJournal,
-                        out actualPhase,
-                        out _),
-                    Is.True);
-                Assert.That(
-                    actualPhase,
-                    Is.EqualTo(
-                        OrpheusAudioAuthoringTransactionPhase.RolledBack));
+                    Directory.Exists(
+                        Path.GetDirectoryName(interruptedJournal)),
+                    Is.False);
                 fixture.AssertBaselineRestored();
             }
             finally
@@ -449,7 +436,7 @@ namespace Orpheus.Audio.Editor.Tests
 
         [TestCase((byte)OrpheusAudioAuthoringTransactionPhase.Committed)]
         [TestCase((byte)OrpheusAudioAuthoringTransactionPhase.RolledBack)]
-        public void Recovery_SuccessfulTerminalPhasesRemainUntouched(
+        public void Recovery_SuccessfulTerminalPhasesArePruned(
             byte terminalPhaseValue)
         {
             var phase =
@@ -461,13 +448,39 @@ namespace Orpheus.Audio.Editor.Tests
                 id,
                 phase,
                 "[]");
-            var before = File.ReadAllBytes(journal);
 
             Assert.That(
                 OrpheusAudioAuthoringTransaction
                     .TryRecoverInterruptedForTests(_root),
                 Is.True);
-            CollectionAssert.AreEqual(before, File.ReadAllBytes(journal));
+            Assert.That(
+                Directory.Exists(Path.GetDirectoryName(journal)),
+                Is.False);
+        }
+
+        [Test]
+        public void Recovery_TerminalCleanupPreservesForeignSiblingAndBlocks()
+        {
+            var id = Guid.NewGuid().ToString("N");
+            var directory = Path.Combine(_root, id);
+            var journal = Path.Combine(directory, "journal.json");
+            var foreign = Path.Combine(directory, "foreign.bin");
+            OrpheusAudioAuthoringTransaction.WriteJournalForTests(
+                journal,
+                id,
+                OrpheusAudioAuthoringTransactionPhase.Committed,
+                "[]");
+            File.WriteAllText(foreign, "foreign");
+
+            Assert.That(
+                OrpheusAudioAuthoringTransaction
+                    .TryRecoverInterruptedForTests(_root),
+                Is.False);
+            Assert.That(
+                OrpheusAudioAuthoringTransaction.LastFailureForTests,
+                Is.EqualTo("RecoveryTerminalCleanup:" + journal));
+            Assert.That(File.Exists(journal), Is.True);
+            Assert.That(File.ReadAllText(foreign), Is.EqualTo("foreign"));
         }
 
         [TestCase("top-extra")]
@@ -599,6 +612,39 @@ namespace Orpheus.Audio.Editor.Tests
             Assert.That(File.ReadAllText(asset), Is.EqualTo("before"));
             Assert.That(File.ReadAllText(meta), Is.EqualTo("guid: before"));
             Assert.That(Directory.Exists(Path.Combine(_root, "Created")), Is.False);
+        }
+
+        [Test]
+        public void FileFixture_RepeatedRecoveryBoundsTerminalRetention()
+        {
+            for (var index = 0; index < 8; index++)
+            {
+                Assert.That(
+                    OrpheusAudioAuthoringTransaction
+                        .TryRecoverInterruptedForTests(_root),
+                    Is.True);
+                var result =
+                    OrpheusAudioAuthoringTransaction.ExecuteFileFixtureForTests(
+                        _root,
+                        Array.Empty<string>(),
+                        () => { },
+                        Array.Empty<string>());
+
+                Assert.That(
+                    result,
+                    Is.EqualTo(
+                        OrpheusAudioAuthoringCompileStatus.SucceededChanged));
+                Assert.That(
+                    Directory.GetDirectories(_root),
+                    Has.Length.EqualTo(1),
+                    "iteration=" + index);
+            }
+
+            Assert.That(
+                OrpheusAudioAuthoringTransaction
+                    .TryRecoverInterruptedForTests(_root),
+                Is.True);
+            Assert.That(Directory.GetFileSystemEntries(_root), Is.Empty);
         }
 
         [Test]

@@ -30,7 +30,7 @@ Pinned Git revision:
 ```json
 {
   "dependencies": {
-    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.0"
+    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.1"
   }
 }
 ```
@@ -45,7 +45,7 @@ Manager resolution and script compilation finish.
 3. Open `Samples`.
 4. Import `Playable One Shot`.
 5. Open the imported
-   `Assets/Samples/Orpheus Audio/0.3.0/Playable One Shot` directory.
+   `Assets/Samples/Orpheus Audio/0.3.1/Playable One Shot` directory.
 
 Unity owns the imported copy. Package updates do not overwrite it.
 
