@@ -1,7 +1,7 @@
 # API Reference
 
 This task-oriented reference covers the supported consumer owners in package
-`0.3.2`. The checked-in API baseline is the exhaustive signature contract.
+`0.3.3`. The checked-in API baseline is the exhaustive signature contract.
 All runtime calls are main-thread-only unless stated otherwise. Invalid calls
 reject deterministically and degrade to silence.
 
@@ -11,10 +11,15 @@ reject deterministically and degrade to silence.
 | --- | --- |
 | `Orpheus.Audio` | Unity runtime, Host assets, Manager, Factory, and Bridges |
 | `Orpheus.Audio.Core` | Public value contracts used by Host integration |
-| `Orpheus.Audio.Editor` | Key Manifest, Validation Profile, generation, and validation |
+| `Orpheus.Audio.Editor` | Key Manifest, Validation Profile, Module Recipe and Authoring Profile assets, generation, and validation |
 | `Orpheus.Audio.Generated` | Host-generated typed Audio Keys |
 
-Other Core policy types are implementation details.
+The public Editor authoring ABI types are `OrpheusAudioModuleRecipe`,
+`OrpheusAudioModuleEventRecipe`, and `OrpheusAudioAuthoringProfile`. Module
+Recipe and Authoring Profile are ScriptableObject assets. Module Event Recipe
+is a serialized value inside a Module Recipe. Compiler modes, results, report
+writers, transaction recovery, and the batch carrier are internal. Other Core
+policy types are implementation details.
 
 ## Session creation
 

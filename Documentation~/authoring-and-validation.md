@@ -4,7 +4,7 @@ The Host Manifest, Audio Events, Catalog, Settings, Runtime Host prefab, and
 Listener Scenes form one validated authoring set. Runtime never scans the
 project to discover content.
 
-Public Contract v1 in package `0.3.2` freezes the serialized field identities
+Public Contract v1 in package `0.3.3` freezes the serialized field identities
 for these Host assets. Upgrade through the package changelog and migration
 guide. Do not rename fields or rewrite package assets through reflection.
 
@@ -30,7 +30,24 @@ assets and Catalog.
 
 ## Authoring automation
 
-One enabled Validation Profile owns one authoring enrollment.
+This is the M1 authoring workflow. Its recipe, enrollment, output, and command
+contracts remain stable across the `0.3` package line.
+
+Exactly one Validation Profile in the project may be pending or enrolled,
+regardless of whether it is enabled. Every other profile remains manual.
+Enabled manual profiles must use the same Manifest and already validate
+against the proposed Manifest state.
+
+Before the first Analyze:
+
+- assign every numeric Audio Key ID in the Host Manifest; the compiler never
+  allocates IDs;
+- create an empty current-schema Catalog at
+  `<generatedRoot>/OrpheusAudioCatalog.asset`;
+- assign that same Catalog to the Authoring Profile and Validation Profile;
+- leave the Validation Profile enrollment GUID empty;
+- select the enabled `OrpheusAudioValidationProfile` asset before invoking an
+  authoring menu command.
 
 1. Create Module Recipe assets.
 2. Create one Audio Authoring Profile.
@@ -60,6 +77,24 @@ and orphan deletion are available only after enrollment. Orphan deletion
 permanently removes only tracked generated orphans and requires a second
 confirmation showing the generated root and orphan count.
 
+Committed output paths are exact:
+
+```text
+<generatedRoot>/Events/AE_<symbol>.asset
+<generatedRoot>/OrpheusAudioCatalog.asset
+<generatedRoot>/OrpheusAuthoringOwnership.json
+<generatedRoot>/OrpheusAuthoringClosure.json
+Assets/OrpheusGenerated/Orpheus.Audio.Generated.asmdef
+Assets/OrpheusGenerated/OrpheusAudioKeys.g.cs
+```
+
+Commit the Authoring Profile, enrolled Validation Profile, Recipes, Manifest,
+Catalog, generated Events, typed-key files, ownership and closure reports, and
+every generated `.meta` file together. Normal Compile reports tracked orphans
+but does not delete them. Only `Compile And Delete Tracked Orphans` may remove
+an orphan whose recorded GUID, path, type, generated root, and current recipe
+ownership all agree. Foreign or identity-ambiguous files are never deleted.
+
 Batch automation uses Unity's internal `-executeMethod` carrier:
 
 ```powershell
@@ -71,14 +106,33 @@ Unity.exe -batchmode -nographics `
   -orpheusBuildTarget <StandaloneWindows|StandaloneWindows64|Android>
 ```
 
-Each Orpheus argument is required exactly once. Unknown, repeated, missing,
-interactive confirmation modes, or unsupported input is rejected. Enrollment
-acceptance and orphan deletion remain menu-only operations. Exit `0` means only
-`SucceededUnchanged` or `SucceededChanged`. Other compiler statuses preserve
-their numeric exit code; usage or internal carrier failure exits `2`.
+`-orpheusProfileGuid` is the lowercase 32-character asset GUID of the
+Validation Profile. Mode and target values are case-sensitive. Each Orpheus
+argument is required exactly once. Unknown, repeated, missing, interactive
+confirmation modes, or unsupported input is rejected. Enrollment acceptance
+and orphan deletion remain menu-only operations.
+
+| Exit code | Meaning |
+| --- | --- |
+| `0` | `SucceededChanged` or `SucceededUnchanged` |
+| `2` | Invalid usage, internal carrier failure, or unknown status |
+| `3` | Compile rejected before mutation |
+| `4` | Mutation failed and rollback completed |
+| `5` | Rollback could not be proven; manual repair is required |
 
 The compiler, modes, reports, batch carrier, and transaction orchestration are
 package-internal. Host code must not call them as an API.
+
+### Validation and build behavior
+
+Analyze, the shared Validator, and build preprocessing are read-only. They do
+not repair, compile, enroll, or delete content.
+
+- pending enrollment blocks a player build;
+- stale generated output or stale ownership/closure blocks a build;
+- invalid, non-terminal, or `RollbackFailed` transaction journals fail closed;
+- target-specific Clip importer mismatch blocks the active build target;
+- build preprocessing never invokes Compile or transaction recovery.
 
 ### Recipe field contract
 
@@ -141,10 +195,10 @@ keep existing manual Events untouched
   -> assign Authoring Profile with empty enrollment GUID
   -> Analyze
   -> review proposed Manifest baseline, ownership and diff
-  -> CompileAndAcceptEnrollment
+  -> Accept And Compile Enrollment
   -> review generated diff
   -> run Validation Profile and build lint
-  -> commit recipes and generated outputs together
+  -> commit both profiles, recipes, Manifest, generated outputs, reports and .meta files together
 ```
 
 Enrollment has no v1 undo. Do not point a pending profile at manual Event
