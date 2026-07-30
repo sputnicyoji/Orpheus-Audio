@@ -1,14 +1,14 @@
 {
   "name": "com.orpheus.audio",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "displayName": "Orpheus Audio",
-  "description": "Unity-native game-audio runtime with a pure-policy core and explicit session ownership.",
+  "description": "Unity-native game-audio runtime with deterministic Editor authoring, a pure-policy core, and explicit session ownership.",
   "unity": "2022.3",
   "unityRelease": "62f2c1",
   "license": "MIT",
-  "licensesUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.2/LICENSE.md",
-  "documentationUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.2/Documentation~/index.md",
-  "changelogUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.2/CHANGELOG.md",
+  "licensesUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.3/LICENSE.md",
+  "documentationUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.3/Documentation~/index.md",
+  "changelogUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.3/CHANGELOG.md",
   "dependencies": {
     "com.unity.modules.audio": "1.0.0"
   },
@@ -29,7 +29,8 @@
     "game-audio",
     "unity",
     "audio-mixer",
-    "audio-source"
+    "audio-source",
+    "audio-authoring"
   ],
   "author": {
     "name": "Yoji",

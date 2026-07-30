@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-07-30
+
+- Added a discoverable M1 authoring quickstart to the package README and
+  manual.
+- Documented enrollment prerequisites, exact generated output and commit
+  closure, tracked-orphan safety, batch exit codes, and fail-closed build
+  behavior.
+- Clarified the public Editor authoring ABI types without changing public API,
+  serialized asset ABI, runtime behavior, or platform support.
+
 ## [0.3.2] - 2026-07-30
 
 - Raised the transient Audio Event clip-count ceiling from `8` to `16` for

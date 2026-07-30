@@ -34,6 +34,15 @@ Tests/Baselines/GeneratedKeys.v1.golden.cs.txt
 
 Do not rewrite package-owned serialized fields through reflection.
 
+## `0.3.2` to `0.3.3`
+
+This is a documentation-only upgrade. Runtime behavior, public API, serialized
+asset ABI, generated-key compatibility, clip-count limits, and platform
+support do not change.
+
+No asset migration or key regeneration is required. Reimported Package Manager
+samples appear under the versioned `0.3.3` sample directory.
+
 ## `0.3.1` to `0.3.2`
 
 `0.3.2` raises the transient Audio Event clip-count ceiling from `8` to `16`.

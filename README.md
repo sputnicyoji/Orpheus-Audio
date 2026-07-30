@@ -1,7 +1,7 @@
 # Orpheus Audio
 
-Unity-native game-audio runtime with explicit session ownership and a pure C#
-policy core.
+Unity-native game-audio runtime with deterministic Editor authoring, explicit
+session ownership, and a pure C# policy core.
 
 ## Compatibility
 
@@ -13,7 +13,7 @@ policy core.
 | Android | Experimental |
 | iOS, macOS, WebGL, other platforms | Unsupported until verified |
 
-Package `0.3.2` declares Public Contract v1. It remains pre-`1.0`.
+Package `0.3.3` declares Public Contract v1. It remains pre-`1.0`.
 
 ## Install
 
@@ -26,7 +26,7 @@ system `PATH`.
 ```json
 {
   "dependencies": {
-    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.2"
+    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.3"
   }
 }
 ```
@@ -60,14 +60,36 @@ Unity resolves `file:` from the consuming project's `Packages` directory.
 4. Run `Tools > Orpheus > Validate Audio Profiles`.
 5. Open `PlayableOneShot.unity` and enter Play Mode.
 
-For recipe-driven generation, assign an Audio Authoring Profile to the enabled
-Validation Profile. Analyze first. Then explicitly accept enrollment before
-using the enrolled compile commands. See
-[Authoring and Validation](Documentation~/authoring-and-validation.md).
-
 The separate `Minimal Setup` sample is intentionally silent. It demonstrates
 session ownership, Listener handoff, persisted gains, and teardown without
 production content.
+
+## M1 authoring automation
+
+M1 provides deterministic recipe-driven generation for Audio Events, the
+Catalog, and typed Audio Keys. Runtime playback remains independent from the
+Editor compiler.
+
+1. Create Module Recipe assets and one Audio Authoring Profile.
+2. Create an empty Catalog at
+   `<generatedRoot>/OrpheusAudioCatalog.asset`.
+3. Assign the Host Manifest, Recipes, Catalog, and generated root.
+4. Assign the Authoring Profile to the enabled Validation Profile and select
+   that Validation Profile asset.
+5. Run `Tools > Orpheus > Analyze Enrolled Authoring`.
+6. Review the report under `Library/Orpheus/AuthoringAnalysis`.
+7. Run `Tools > Orpheus > Accept And Compile Enrollment`.
+8. Run `Tools > Orpheus > Validate Audio Profiles`.
+
+Enrollment is explicit and sticky. Analyze is read-only. Compile is
+transactional. Tracked-orphan deletion requires a second confirmation.
+Recipes, Manifest changes, and generated outputs belong in the same Host
+commit with the Authoring Profile and enrolled Validation Profile.
+
+Read [Authoring and Validation](Documentation~/authoring-and-validation.md)
+before enrolling existing manual content. It defines the serialized recipe
+contract, command permissions, batchmode carrier, ownership boundary,
+manual-to-enrolled migration, and repair map.
 
 ## Documentation
 
