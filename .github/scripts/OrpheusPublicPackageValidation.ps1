@@ -36,7 +36,9 @@ $script:OrpheusGovernanceFiles = [string[]]@(
     ".github/ISSUE_TEMPLATE/feature_request.yml",
     ".github/PULL_REQUEST_TEMPLATE.md",
     ".github/scripts/OrpheusPublicPackageValidation.ps1",
+    ".github/scripts/OrpheusUpmTarball.ps1",
     ".github/scripts/test-public-package.ps1",
+    ".github/scripts/test-public-tarball.ps1",
     ".github/workflows/unity-compatibility.yml",
     ".github/workflows/verify.yml"
 )
@@ -351,6 +353,13 @@ function Assert-OrpheusPackageManifest {
         throw "package.json version is invalid."
     }
 
+    # Tarball creation packs with --ignore-scripts, so a declared lifecycle script
+    # would be dead weight in the published artifact and live code for any consumer
+    # that installs through npm directly. Reject the property even when it is empty.
+    if ($null -ne $package.PSObject.Properties["scripts"]) {
+        throw "package.json must not declare npm lifecycle scripts."
+    }
+
     $samples = @($package.samples)
     if ($samples.Count -ne 2) {
         throw "package.json must declare exactly two valid samples."
@@ -385,10 +394,14 @@ function Assert-OrpheusPackageManifest {
 function Assert-OrpheusJsonAndAssemblyDefinitions {
     param(
         [Parameter(Mandatory)]
-        [string] $RepositoryRoot
+        [string] $RepositoryRoot,
+
+        [switch] $PublicRepositoryLayout
     )
 
-    $packageFiles = Get-OrpheusPackageFiles -PackageRoot $RepositoryRoot -PublicRepositoryLayout
+    $packageFiles = Get-OrpheusPackageFiles `
+        -PackageRoot $RepositoryRoot `
+        -PublicRepositoryLayout:$PublicRepositoryLayout
     $assemblyNames = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
     $assemblyDefinitions = [System.Collections.Generic.List[object]]::new()
 
@@ -442,11 +455,15 @@ function Assert-OrpheusJsonAndAssemblyDefinitions {
 function Assert-OrpheusUnityMetadata {
     param(
         [Parameter(Mandatory)]
-        [string] $RepositoryRoot
+        [string] $RepositoryRoot,
+
+        [switch] $PublicRepositoryLayout
     )
 
     $root = Get-OrpheusNormalizedRoot -Path $RepositoryRoot
-    $packageFiles = Get-OrpheusPackageFiles -PackageRoot $root -PublicRepositoryLayout
+    $packageFiles = Get-OrpheusPackageFiles `
+        -PackageRoot $root `
+        -PublicRepositoryLayout:$PublicRepositoryLayout
 
     foreach ($file in $packageFiles) {
         if (
@@ -670,7 +687,9 @@ function Assert-OrpheusVersionSurfaces {
         [string] $RepositoryRoot,
 
         [Parameter(Mandatory)]
-        [string] $PackageVersion
+        [string] $PackageVersion,
+
+        [switch] $PublicRepositoryLayout
     )
 
     $versionPattern = "(?<![0-9A-Za-z.])v?(?<version>[0-9]+\.[0-9]+\.[0-9]+)(?![0-9A-Za-z.])"
@@ -745,9 +764,13 @@ function Assert-OrpheusVersionSurfaces {
         }
     }
 
-    $issueTemplate = Get-Content -LiteralPath (Join-Path $RepositoryRoot ".github/ISSUE_TEMPLATE/bug_report.yml") -Raw
-    if ($issueTemplate -notmatch "(?m)^\s*placeholder:\s*$([regex]::Escape($PackageVersion))\s*$") {
-        throw "Current issue-template package version does not match package.json $PackageVersion."
+    # The issue template is a public governance surface. A bare package directory,
+    # such as an extracted UPM tarball, has no .github tree to validate.
+    if ($PublicRepositoryLayout) {
+        $issueTemplate = Get-Content -LiteralPath (Join-Path $RepositoryRoot ".github/ISSUE_TEMPLATE/bug_report.yml") -Raw
+        if ($issueTemplate -notmatch "(?m)^\s*placeholder:\s*$([regex]::Escape($PackageVersion))\s*$") {
+            throw "Current issue-template package version does not match package.json $PackageVersion."
+        }
     }
 }
 
@@ -1308,14 +1331,16 @@ function Assert-OrpheusVerifyWorkflow {
     }
     $steps = @($job.steps)
     Assert-OrpheusActionPins -Steps $steps
-    if ($steps.Count -ne 2) {
-        throw "Workflow policy verify requires pinned checkout and the public validator."
+    if ($steps.Count -ne 3) {
+        throw "Workflow policy verify requires pinned checkout, the public validator, and tarball validation."
     }
     $checkout = $steps[0]
     $validation = $steps[1]
+    $tarballValidation = $steps[2]
     Assert-OrpheusExactYamlKeys -Mapping $checkout -Expected @("uses", "with") -Label "verify checkout step"
     Assert-OrpheusExactYamlKeys -Mapping $checkout.with -Expected @("persist-credentials") -Label "verify checkout inputs"
     Assert-OrpheusExactYamlKeys -Mapping $validation -Expected @("name", "shell", "run") -Label "verify validation step"
+    Assert-OrpheusExactYamlKeys -Mapping $tarballValidation -Expected @("name", "shell", "run") -Label "verify tarball validation step"
     if (
         -not [string]::Equals([string] $checkout.uses, "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1", [System.StringComparison]::Ordinal) -or
         -not [string]::Equals([string] $checkout.with["persist-credentials"], "false", [System.StringComparison]::OrdinalIgnoreCase)
@@ -1332,6 +1357,19 @@ function Assert-OrpheusVerifyWorkflow {
         )
     ) {
         throw "Workflow policy verify validation command must be exact and mandatory."
+    }
+    # The tarball step is a required third step in a fixed position. Both validation
+    # commands stay exact so a rename, reorder, or shell swap fails the policy.
+    if (
+        -not [string]::Equals([string] $tarballValidation.name, "Validate UPM tarball", [System.StringComparison]::Ordinal) -or
+        -not [string]::Equals([string] $tarballValidation.shell, "pwsh", [System.StringComparison]::Ordinal) -or
+        -not [string]::Equals(
+            ([string] $tarballValidation.run).Trim(),
+            "pwsh -NoProfile -File ./.github/scripts/test-public-tarball.ps1",
+            [System.StringComparison]::Ordinal
+        )
+    ) {
+        throw "Workflow policy verify tarball validation command must be exact and mandatory."
     }
     if (
         [string]::Join("`n", @(Get-OrpheusYamlScalars -Value $Document)) -match "(?i)\bsecrets\b" -or
@@ -1585,6 +1623,49 @@ function Assert-OrpheusExportManifest {
     return $manifest
 }
 
+function Invoke-OrpheusPackageContentValidation {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $PackageRoot,
+
+        [switch] $PublicRepositoryLayout
+    )
+
+    $root = Get-OrpheusNormalizedRoot -Path $PackageRoot
+    Assert-OrpheusNoLinks -Root $root
+    $package = Assert-OrpheusPackageManifest -RepositoryRoot $root
+    Assert-OrpheusJsonAndAssemblyDefinitions `
+        -RepositoryRoot $root `
+        -PublicRepositoryLayout:$PublicRepositoryLayout
+    Assert-OrpheusUnityMetadata `
+        -RepositoryRoot $root `
+        -PublicRepositoryLayout:$PublicRepositoryLayout
+    Assert-OrpheusCoreIsolation -RepositoryRoot $root
+    Assert-OrpheusMarkdownLinks -RepositoryRoot $root
+    Assert-OrpheusVersionSurfaces `
+        -RepositoryRoot $root `
+        -PackageVersion ([string] $package.version) `
+        -PublicRepositoryLayout:$PublicRepositoryLayout
+    Assert-OrpheusSensitiveContent -RepositoryRoot $root
+
+    $packageFiles = @(
+        Get-OrpheusPackageFiles `
+            -PackageRoot $root `
+            -PublicRepositoryLayout:$PublicRepositoryLayout
+    )
+    $fingerprint = Get-OrpheusPackageTreeSha256 `
+        -PackageRoot $root `
+        -PublicRepositoryLayout:$PublicRepositoryLayout
+
+    return [pscustomobject][ordered]@{
+        packageName = [string] $package.name
+        packageVersion = [string] $package.version
+        packageTreeSha256 = $fingerprint
+        fileCount = $packageFiles.Count
+    }
+}
+
 function Invoke-OrpheusPublicPackageValidation {
     [CmdletBinding()]
     param(
@@ -1594,24 +1675,22 @@ function Invoke-OrpheusPublicPackageValidation {
 
     $root = Get-OrpheusNormalizedRoot -Path $RepositoryRoot
     Assert-OrpheusNoLinks -Root $root
-    $package = Assert-OrpheusPackageManifest -RepositoryRoot $root
-    Assert-OrpheusJsonAndAssemblyDefinitions -RepositoryRoot $root
-    Assert-OrpheusUnityMetadata -RepositoryRoot $root
-    Assert-OrpheusPublicLayout -RepositoryRoot $root
-    Assert-OrpheusCoreIsolation -RepositoryRoot $root
-    Assert-OrpheusMarkdownLinks -RepositoryRoot $root
-    Assert-OrpheusVersionSurfaces -RepositoryRoot $root -PackageVersion ([string] $package.version)
+    # Workflow policy precedes package content scanning. A policy-violating workflow
+    # can carry text that also trips the sensitive-content absolute-path rule, and the
+    # policy diagnosis is the specific one. Reordering these swaps the reported cause.
     Assert-OrpheusWorkflowPolicy -RepositoryRoot $root
-    Assert-OrpheusSensitiveContent -RepositoryRoot $root
-    $fingerprint = Get-OrpheusPackageTreeSha256 -PackageRoot $root -PublicRepositoryLayout
+    $content = Invoke-OrpheusPackageContentValidation `
+        -PackageRoot $root `
+        -PublicRepositoryLayout
+    Assert-OrpheusPublicLayout -RepositoryRoot $root
     $manifest = Assert-OrpheusExportManifest `
         -RepositoryRoot $root `
-        -PackageVersion ([string] $package.version) `
-        -PackageTreeSha256 $fingerprint
+        -PackageVersion $content.packageVersion `
+        -PackageTreeSha256 $content.packageTreeSha256
 
     return [pscustomobject][ordered]@{
-        packageVersion = [string] $package.version
-        packageTreeSha256 = $fingerprint
+        packageVersion = $content.packageVersion
+        packageTreeSha256 = $content.packageTreeSha256
         privateSourceCommit = [string] $manifest.privateSourceCommit
         githubSha = if ($env:GITHUB_SHA) { [string] $env:GITHUB_SHA } else { $null }
     }
