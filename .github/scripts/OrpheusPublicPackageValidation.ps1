@@ -1,3 +1,5 @@
+Set-StrictMode -Version Latest
+
 $script:OrpheusPackageDirectories = [string[]]@(
     "Documentation~",
     "Editor",
