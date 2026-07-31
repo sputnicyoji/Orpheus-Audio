@@ -3,6 +3,8 @@
 # Dot-sourced by test-public-tarball.ps1 in the public repository and by
 # build-public-package-tarball.ps1 in the private repository. Both layouts keep
 # OrpheusPublicPackageValidation.ps1 as a sibling of this file.
+Set-StrictMode -Version Latest
+
 . (Join-Path $PSScriptRoot "OrpheusPublicPackageValidation.ps1")
 
 $script:OrpheusUpmTarballSchemaVersion = 1

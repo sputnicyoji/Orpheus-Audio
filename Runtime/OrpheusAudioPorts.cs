@@ -128,6 +128,8 @@ namespace Orpheus.Audio
             }
         }
 
+        // Fixed four snapshots; no mixer group walk — safe on Tick/Play carrier checks.
+
         internal void ValidateSnapshotReferences()
         {
             if (!_snapshots.HasAllSnapshotReferences ||

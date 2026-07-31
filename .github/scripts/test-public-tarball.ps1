@@ -3,6 +3,7 @@ param(
     [string] $RepositoryRoot
 )
 
+Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 if ([string]::IsNullOrWhiteSpace($RepositoryRoot)) {
