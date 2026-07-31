@@ -23,3 +23,6 @@ jobs:
       - name: Validate
         shell: pwsh
         run: pwsh -NoProfile -File ./.github/scripts/test-public-package.ps1
+      - name: Validate UPM tarball
+        shell: pwsh
+        run: pwsh -NoProfile -File ./.github/scripts/test-public-tarball.ps1
