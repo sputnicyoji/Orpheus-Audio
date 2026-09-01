@@ -34,6 +34,16 @@ Tests/Baselines/GeneratedKeys.v1.golden.cs.txt
 
 Do not rewrite package-owned serialized fields through reflection.
 
+## `0.3.3` to `0.3.4`
+
+`0.3.4` adds exact Unity `6000.3.12f1` Windows Editor automated
+compatibility. Unity `2022.3.62f2c1` remains the minimum and primary
+validation host. Unity 6000 Windows Standalone was not re-certified.
+
+Public API, serialized asset ABI, generated-key shape, Runtime behavior, and
+Host asset shapes remain compatible. No asset migration is required. Reimport
+Package Manager samples under the versioned `0.3.4` sample directory.
+
 ## `0.3.2` to `0.3.3`
 
 This is a documentation-only upgrade. Runtime behavior, public API, serialized

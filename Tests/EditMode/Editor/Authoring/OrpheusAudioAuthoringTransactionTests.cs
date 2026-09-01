@@ -1217,6 +1217,48 @@ namespace Orpheus.Audio.Editor.Tests
             }
         }
 
+        [Test]
+        public void AssetsIntegration_WritesCatalogReferencesAfterImport()
+        {
+            var fixture = new IntegrationFixture();
+            try
+            {
+                var catalogCountAfterImport = -1;
+                var injection = new ActionInjection(
+                    "Refresh",
+                    false,
+                    () =>
+                    {
+                        var serialized = new SerializedObject(fixture.Catalog);
+                        catalogCountAfterImport = serialized
+                            .FindProperty("_events")
+                            .arraySize;
+                    });
+
+                var result = OrpheusAudioAuthoringTransaction.Execute(
+                    fixture.Profile,
+                    fixture.Plan,
+                    fixture.Artifacts,
+                    BuildTargetGroup.Standalone,
+                    new[] { fixture.Profile },
+                    injection);
+
+                Assert.That(
+                    result,
+                    Is.EqualTo(OrpheusAudioAuthoringCompileStatus.SucceededChanged),
+                    OrpheusAudioAuthoringTransaction.LastFailureForTests);
+                Assert.That(catalogCountAfterImport, Is.Zero);
+                var serializedCatalog = new SerializedObject(fixture.Catalog);
+                Assert.That(
+                    serializedCatalog.FindProperty("_events").arraySize,
+                    Is.EqualTo(1));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
         [TestCase(true)]
         [TestCase(false)]
         public void ExecutionReportFailure_IsRolledBackBeforeCommit(bool before)

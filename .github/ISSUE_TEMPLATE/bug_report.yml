@@ -13,21 +13,21 @@ body:
     id: package-version
     attributes:
       label: Package version
-      placeholder: 0.3.3
+      placeholder: 0.3.4
     validations:
       required: true
   - type: input
     id: unity-version
     attributes:
       label: Unity version
-      placeholder: 2022.3.62f2c1
+      placeholder: 2022.3.62f2c1 or 6000.3.12f1
     validations:
       required: true
   - type: input
     id: platform
     attributes:
       label: Platform
-      placeholder: Windows Editor, Windows Standalone, or Android
+      placeholder: Windows Editor, Windows Standalone (Unity 2022), or Android
     validations:
       required: true
   - type: textarea

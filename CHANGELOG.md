@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-09-01
+
+- Added exact Unity `6000.3.12f1` Windows Editor automated compatibility.
+- Preserved Unity `2022.3.62f2c1` as the minimum and primary validation host.
+- Fixed Authoring Catalog reference materialization across both exact Unity
+  versions without changing public API, serialized asset ABI, generated-key
+  shape, runtime behavior, or hot-path allocation.
+- Kept the existing Unity 2022 Windows Standalone support claim unchanged.
+  Unity 6000 Windows Standalone was not re-certified by this release.
+- Kept Android Experimental and all other platform boundaries unchanged.
+
 ## [0.3.3] - 2026-07-30
 
 - Added a discoverable M1 authoring quickstart to the package README and
