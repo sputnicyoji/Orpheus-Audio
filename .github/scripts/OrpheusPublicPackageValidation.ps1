@@ -346,9 +346,9 @@ function Assert-OrpheusPackageManifest {
 
     if (
         -not [string]::Equals([string] $package.unity, "2022.3", [System.StringComparison]::Ordinal) -or
-        -not [string]::Equals([string] $package.unityRelease, "62f2c1", [System.StringComparison]::Ordinal)
+        -not [string]::Equals([string] $package.unityRelease, "62f2", [System.StringComparison]::Ordinal)
     ) {
-        throw "package.json must declare Unity 2022.3.62f2c1."
+        throw "package.json must declare the UPM floor Unity 2022.3.62f2."
     }
 
     if ([string] $package.version -notmatch "^[0-9]+\.[0-9]+\.[0-9]+$") {

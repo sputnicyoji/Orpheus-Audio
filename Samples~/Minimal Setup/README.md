@@ -1,6 +1,6 @@
 # Orpheus Minimal Setup
 
-This package `0.3.3` sample is an empty, consumer-owned Orpheus Audio Session
+This package `0.3.4` sample is an empty, consumer-owned Orpheus Audio Session
 for Unity `2022.3.62f2c1`. It proves the supported Factory, Manager, Runtime
 Host, asset, and lifecycle contract. It contains no Audio Event, no playable
 Audio Key, and no production content.

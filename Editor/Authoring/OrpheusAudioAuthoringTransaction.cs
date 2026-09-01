@@ -166,6 +166,7 @@ namespace Orpheus.Audio.Editor
                 AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
                 Step(injection, false, "Import");
                 Step(injection, false, "Refresh");
+                WriteCatalogAfterImport(plan, injection);
                 Step(injection, true, "OwnershipMaterialize");
                 if (!TryMaterializeOwnershipTemplate(
                         materializedOwnership,
@@ -468,10 +469,14 @@ namespace Orpheus.Audio.Editor
             ref string executionJson,
             IOrpheusAudioAuthoringFailureInjection injection)
         {
-            var movedEvents = new Dictionary<ushort, OrpheusAudioEvent>();
             for (var index = 0; index < plan.WriteOperationCount; index++)
             {
                 var operation = plan.GetWriteOperation(index);
+                if (operation.Kind == OrpheusAuthoringWriteKind.WriteCatalog)
+                {
+                    continue;
+                }
+
                 Step(injection, true, operation.Kind.ToString());
                 switch (operation.Kind)
                 {
@@ -514,14 +519,6 @@ namespace Orpheus.Audio.Editor
                         }
 
                         Step(injection, false, "MoveAsset");
-                        movedEvents.Add(operation.Key, movedEvent);
-                        break;
-                    case OrpheusAuthoringWriteKind.WriteCatalog:
-                        WriteCatalog(
-                            profile.Catalog,
-                            plan,
-                            movedEvents,
-                            injection);
                         break;
                     case OrpheusAuthoringWriteKind.WriteTypedKeys:
                         Step(injection, true, "TextReplace");
@@ -576,6 +573,44 @@ namespace Orpheus.Audio.Editor
 
                 Step(injection, false, operation.Kind.ToString());
             }
+        }
+
+        private static void WriteCatalogAfterImport(
+            OrpheusAuthoringCompilationPlan plan,
+            IOrpheusAudioAuthoringFailureInjection injection)
+        {
+            var writeCatalog = false;
+            for (var index = 0; index < plan.WriteOperationCount; index++)
+            {
+                if (plan.GetWriteOperation(index).Kind ==
+                    OrpheusAuthoringWriteKind.WriteCatalog)
+                {
+                    writeCatalog = true;
+                    break;
+                }
+            }
+
+            if (!writeCatalog)
+            {
+                return;
+            }
+
+            var catalog = AssetDatabase.LoadAssetAtPath<OrpheusAudioCatalog>(
+                plan.CatalogAssetPath);
+            if (catalog == null)
+            {
+                throw new InvalidDataException("CatalogAsset");
+            }
+
+            Step(
+                injection,
+                true,
+                OrpheusAuthoringWriteKind.WriteCatalog.ToString());
+            WriteCatalog(catalog, plan, injection);
+            Step(
+                injection,
+                false,
+                OrpheusAuthoringWriteKind.WriteCatalog.ToString());
         }
 
         private static void WriteEvent(
@@ -670,7 +705,6 @@ namespace Orpheus.Audio.Editor
         private static void WriteCatalog(
             OrpheusAudioCatalog catalog,
             OrpheusAuthoringCompilationPlan plan,
-            Dictionary<ushort, OrpheusAudioEvent> movedEvents,
             IOrpheusAudioAuthoringFailureInjection injection)
         {
             var serialized = new SerializedObject(catalog);
@@ -679,14 +713,9 @@ namespace Orpheus.Audio.Editor
             for (var index = 0; index < plan.EventCount; index++)
             {
                 var expected = plan.GetEvent(index);
-                if (!movedEvents.TryGetValue(
-                        expected.Key,
-                        out var audioEvent))
-                {
-                    audioEvent =
-                        AssetDatabase.LoadAssetAtPath<OrpheusAudioEvent>(
-                            expected.AssetPath);
-                }
+                var audioEvent =
+                    AssetDatabase.LoadAssetAtPath<OrpheusAudioEvent>(
+                        expected.AssetPath);
 
                 events.GetArrayElementAtIndex(index).objectReferenceValue =
                     audioEvent;
