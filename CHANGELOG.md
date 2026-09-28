@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.3.5] - 2026-09-28
+
+- Removed the package-root `Documentation~.meta` and `Samples~.meta` files.
+  Unity never imports folders whose names end in `~`, so every consumer logged
+  a missing-folder metadata warning whenever the package resolved.
+- Kept public API, serialized asset ABI, generated-key shape, Runtime and
+  Editor code, sample code, and every platform support claim unchanged.
+
 ## [0.3.4] - 2026-09-01
 
 - Added exact Unity `6000.3.12f1` Windows Editor automated compatibility.

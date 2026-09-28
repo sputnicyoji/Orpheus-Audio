@@ -3,11 +3,11 @@
 Orpheus is a Unity-native game-audio runtime. The consuming game owns content,
 session creation, Scene binding, preferences, and teardown.
 
-This manual describes package `0.3.4` and Public Contract v1. Its Factory,
+This manual describes package `0.3.5` and Public Contract v1. Its Factory,
 Manager, Bridge, Host asset, generated Audio Key, and required Core value
 surfaces form the versioned consumer contract.
 
-Package `0.3.4` also exposes the Editor-only Module Recipe and Authoring
+Package `0.3.5` also exposes the Editor-only Module Recipe and Authoring
 Profile asset contracts introduced by M1 Authoring Automation. M1 provides
 deterministic Analyze, explicit enrollment acceptance, transactional Compile,
 tracked-orphan control, and machine reports. Compiler orchestration remains
@@ -33,7 +33,7 @@ Import `Playable One Shot` for an audible end-to-end Host. Import
 | --- | --- |
 | Unity `2022.3.62f2c1` | Minimum; Windows Editor and Windows Standalone Supported |
 | Unity `6000.3.12f1` | Windows Editor automated compatibility verified |
-| Unity 6000 Windows Standalone | Not re-certified by `0.3.4` |
+| Unity 6000 Windows Standalone | Not re-certified by `0.3.5` |
 | Android | Experimental |
 | iOS, macOS, WebGL, other platforms | Unsupported |
 

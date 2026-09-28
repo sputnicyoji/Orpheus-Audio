@@ -1,14 +1,14 @@
 {
   "name": "com.orpheus.audio",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "displayName": "Orpheus Audio",
   "description": "Unity-native game-audio runtime with deterministic Editor authoring, a pure-policy core, and explicit session ownership.",
   "unity": "2022.3",
   "unityRelease": "62f2",
   "license": "MIT",
-  "licensesUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.4/LICENSE.md",
-  "documentationUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.4/Documentation~/index.md",
-  "changelogUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.4/CHANGELOG.md",
+  "licensesUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.5/LICENSE.md",
+  "documentationUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.5/Documentation~/index.md",
+  "changelogUrl": "https://github.com/sputnicyoji/Orpheus-Audio/blob/v0.3.5/CHANGELOG.md",
   "dependencies": {
     "com.unity.modules.audio": "1.0.0"
   },
