@@ -9,11 +9,11 @@ session ownership, and a pure C# policy core.
 | --- | --- |
 | Unity `2022.3.62f2c1` | Minimum; Windows Editor and Windows Standalone Supported |
 | Unity `6000.3.12f1` | Windows Editor automated compatibility verified |
-| Unity 6000 Windows Standalone | Not re-certified by `0.3.4` |
+| Unity 6000 Windows Standalone | Not re-certified by `0.3.5` |
 | Android | Experimental |
 | iOS, macOS, WebGL, other platforms | Unsupported until verified |
 
-Package `0.3.4` declares Public Contract v1. It remains pre-`1.0`.
+Package `0.3.5` declares Public Contract v1. It remains pre-`1.0`.
 
 ## Install
 
@@ -26,7 +26,7 @@ system `PATH`.
 ```json
 {
   "dependencies": {
-    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.4"
+    "com.orpheus.audio": "https://github.com/sputnicyoji/Orpheus-Audio.git#v0.3.5"
   }
 }
 ```

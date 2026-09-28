@@ -13,7 +13,6 @@ $script:OrpheusPackageRootFiles = [string[]]@(
     "CHANGELOG.md.meta",
     "CONTRIBUTING.md",
     "CONTRIBUTING.md.meta",
-    "Documentation~.meta",
     "Editor.meta",
     "LICENSE.md",
     "LICENSE.md.meta",
@@ -22,7 +21,6 @@ $script:OrpheusPackageRootFiles = [string[]]@(
     "README.md",
     "README.md.meta",
     "Runtime.meta",
-    "Samples~.meta",
     "SECURITY.md",
     "SECURITY.md.meta",
     "Tests.meta"
@@ -479,8 +477,15 @@ function Assert-OrpheusUnityMetadata {
 
     foreach ($directoryName in $script:OrpheusPackageDirectories) {
         $directory = Join-Path $root $directoryName
+        # Unity never imports a folder whose name ends in "~". A .meta beside such a
+        # folder has no asset to describe, so every consumer warns about it on import.
+        # Its children keep their metadata: samples are copied into Assets with it.
+        $isHiddenDirectory = $directoryName.EndsWith("~", [System.StringComparison]::Ordinal)
+        if ($isHiddenDirectory -and [System.IO.File]::Exists("$directory.meta")) {
+            throw "Hidden package folder must not have Unity metadata: $directoryName.meta"
+        }
         foreach ($childDirectory in @(
-            Get-Item -LiteralPath $directory
+            if (-not $isHiddenDirectory) { Get-Item -LiteralPath $directory }
             Get-ChildItem -LiteralPath $directory -Recurse -Directory -Force
         )) {
             if (-not [System.IO.File]::Exists("$($childDirectory.FullName).meta")) {

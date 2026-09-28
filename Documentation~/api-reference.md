@@ -1,7 +1,7 @@
 # API Reference
 
 This task-oriented reference covers the supported consumer owners in package
-`0.3.4`. The checked-in API baseline is the exhaustive signature contract.
+`0.3.5`. The checked-in API baseline is the exhaustive signature contract.
 All runtime calls are main-thread-only unless stated otherwise. Invalid calls
 reject deterministically and degrade to silence.
 

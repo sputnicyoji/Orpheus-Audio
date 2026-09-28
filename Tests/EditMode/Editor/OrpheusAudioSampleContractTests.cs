@@ -42,7 +42,6 @@ namespace Orpheus.Audio.Editor.Tests
 
         private static readonly string[] RequiredSampleFolders =
         {
-            SampleParent,
             SampleRoot,
             SampleRoot + "/Audio",
             SampleRoot + "/Prefabs",
@@ -102,6 +101,11 @@ namespace Orpheus.Audio.Editor.Tests
                 Assert.That(Directory.Exists(folder), Is.True, folder);
                 AssertStableMeta(folder + ".meta");
             }
+
+            // Unity never imports a folder ending in "~"; a .meta beside it makes every
+            // consumer log a missing-folder warning on package resolution.
+            Assert.That(Directory.Exists(SampleParent), Is.True, SampleParent);
+            Assert.That(File.Exists(SampleParent + ".meta"), Is.False, SampleParent + ".meta");
         }
 
         [Test]

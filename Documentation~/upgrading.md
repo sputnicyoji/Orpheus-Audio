@@ -34,6 +34,17 @@ Tests/Baselines/GeneratedKeys.v1.golden.cs.txt
 
 Do not rewrite package-owned serialized fields through reflection.
 
+## `0.3.4` to `0.3.5`
+
+This is a package-metadata-only upgrade. It removes the package-root `.meta`
+files of the hidden `Documentation~` and `Samples~` folders, which made Unity
+log a missing-folder metadata warning whenever the package resolved. Public
+API, serialized asset ABI, generated-key shape, Runtime behavior, and platform
+support do not change.
+
+No asset migration or key regeneration is required. Reimported Package Manager
+samples appear under the versioned `0.3.5` sample directory.
+
 ## `0.3.3` to `0.3.4`
 
 `0.3.4` adds exact Unity `6000.3.12f1` Windows Editor automated
